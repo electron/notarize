@@ -1,0 +1,4 @@
+*.log
+.npmrc
+src
+tsconfig.json
