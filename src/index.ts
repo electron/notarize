@@ -22,7 +22,7 @@ export interface NotarizeResult {
 
 export type NotarizeStartOptions = NotarizeAppOptions & NotarizeCredentials;
 export type NotarizeWaitOptions = NotarizeResult & NotarizeCredentials;
-export type NotarizeStapleOptions = Pick<NotarizeAppOptions, 'appPath'>
+export type NotarizeStapleOptions = Pick<NotarizeAppOptions, 'appPath'>;
 
 export async function startNotarize(opts: NotarizeStartOptions): Promise<NotarizeResult> {
   d('starting notarize process for app:', opts.appPath);
@@ -72,7 +72,7 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
     }
 
     d('found UUID:', uuidMatch[1]);
-    
+
     return {
       uuid: uuidMatch[1],
     };
@@ -105,7 +105,7 @@ export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> 
   }
 
   d('notarzation done with info:', notarizationInfo);
-  
+
   if (notarizationInfo.status === 'invalid') {
     d('notarization failed');
     throw new Error(`Apple failed to notarize your application, check the logs for more info

@@ -21,16 +21,6 @@ export async function withTempDir<T>(fn: (dir: string) => Promise<T>) {
   return result;
 }
 
-export function randomString(len = 20) {
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-  let string = '';
-
-  for (let i = 0; i < len; i += 1)
-    string += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  return string;
-}
-
 class Secret {
   constructor(private value: string) {}
 

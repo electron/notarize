@@ -6,12 +6,16 @@
   "author": "Samuel Attard",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "tslint --project .",
+    "prepublish": "yarn build"
   },
   "devDependencies": {
     "@types/debug": "^0.0.31",
     "@types/fs-extra": "^5.0.4",
     "electron": "^3.0.5",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.11.0",
     "typescript": "^3.1.3"
   },
   "dependencies": {
