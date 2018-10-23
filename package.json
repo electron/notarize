@@ -1,6 +1,6 @@
 {
   "name": "electron-notarize",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Notarize your Electron app",
   "main": "src/index.js",
   "author": "Samuel Attard",
