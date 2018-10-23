@@ -23,6 +23,7 @@ export interface NotarizeResult {
 export type NotarizeStartOptions = NotarizeAppOptions & NotarizeCredentials;
 export type NotarizeWaitOptions = NotarizeResult & NotarizeCredentials;
 export type NotarizeStapleOptions = Pick<NotarizeAppOptions, 'appPath'>;
+export type NotarizeOptions = NotarizeStartOptions;
 
 export async function startNotarize(opts: NotarizeStartOptions): Promise<NotarizeResult> {
   d('starting notarize process for app:', opts.appPath);
@@ -144,4 +145,20 @@ export async function stapleApp(opts: NotarizeStapleOptions): Promise<void> {
 
   d('staple succeeded');
   return;
+}
+
+export async function notarize({
+  appBundleId,
+  appPath,
+  appleId,
+  appleIdPassword,
+}: NotarizeOptions) {
+  const { uuid } = await startNotarize({
+    appBundleId,
+    appPath,
+    appleId,
+    appleIdPassword,
+  });
+  await waitForNotarize({ uuid, appleId, appleIdPassword });
+  await stapleApp({ appPath });
 }
