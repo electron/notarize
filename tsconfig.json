@@ -16,7 +16,8 @@
 		"noUnusedLocals": true,
 		"noImplicitThis": true,
 		"noImplicitAny": true,
-		"noImplicitUseStrict": true
+		"noImplicitUseStrict": true,
+		"declaration": true
 	},
 	"exclude": [
 		"node_modules",
