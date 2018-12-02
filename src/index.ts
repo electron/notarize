@@ -17,7 +17,7 @@ export interface NotarizeAppOptions {
 }
 
 export interface TransporterOptions {
-  ascProvider: string;
+  ascProvider?: string;
 }
 
 export interface NotarizeResult {
@@ -51,7 +51,7 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
     }
     d('zip succeeded, attempting to upload to apple');
 
-    const notarizeStartOpts = [
+    const notarizeArgs = [
       'altool',
       '--notarize-app',
       '-f',
@@ -64,8 +64,8 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
       makeSecret(opts.appleIdPassword),
     ];
 
-    if (opts.ascProvider !== '') {
-      notarizeStartOpts.push(...['-itc_provider', opts.ascProvider]);
+    if (opts.ascProvider) {
+      notarizeStartOpts.push('-itc_provider', opts.ascProvider);
     }
 
     const result = await spawn(
