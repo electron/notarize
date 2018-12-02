@@ -162,7 +162,7 @@ export async function notarize({
   appPath,
   appleId,
   appleIdPassword,
-  ascProvider = '',
+  ascProvider,
 }: NotarizeOptions) {
   const { uuid } = await startNotarize({
     appBundleId,
