@@ -65,12 +65,12 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
     ];
 
     if (opts.ascProvider) {
-      notarizeStartOpts.push('-itc_provider', opts.ascProvider);
+      notarizeArgs.push('-itc_provider', opts.ascProvider);
     }
 
     const result = await spawn(
       'xcrun',
-      notarizeStartOpts,
+      notarizeArgs,
     );
     if (result.code !== 0) {
       throw new Error(`Failed to upload app to Apples notarization servers\n\n${result.output}`);
