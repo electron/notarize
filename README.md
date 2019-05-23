@@ -49,7 +49,7 @@ For notarization, you need the following things:
 1. Never hard code your password into your packaging scripts, use an environment
 variable at a minimum.
 2. It is possible to provide a keychain reference instead of your actual password (assuming that you have already logged into
-to Application Loader from Xcode) .  E.g.
+the Application Loader from Xcode).  For example:
 
 ```js
 const password = `@keychain:"Application Loader: ${appleId}"`;
