@@ -33,6 +33,7 @@ on the train early.
   * `appPath` String - The absolute path to your `.app` file
   * `appleId` String - The username of your apple developer account
   * `appleIdPassword` String - The password for your apple developer account
+  * `ascProvider` String (optional) - Your [Team ID](https://developer.apple.com/account/#/membership) in App Store Connect. This is necessary if you are part of multiple teams
 
 #### Safety when using `appleIdPassword`
 
@@ -56,6 +57,7 @@ async function packageTask () {
     appPath,
     appleId,
     appleIdPassword,
+    ascProvider, // This parameter is optional
   });
 }
 ```

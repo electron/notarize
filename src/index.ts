@@ -16,11 +16,15 @@ export interface NotarizeAppOptions {
   appBundleId: string;
 }
 
+export interface TransporterOptions {
+  ascProvider?: string;
+}
+
 export interface NotarizeResult {
   uuid: string;
 }
 
-export type NotarizeStartOptions = NotarizeAppOptions & NotarizeCredentials;
+export type NotarizeStartOptions = NotarizeAppOptions & NotarizeCredentials & TransporterOptions;
 export type NotarizeWaitOptions = NotarizeResult & NotarizeCredentials;
 export type NotarizeStapleOptions = Pick<NotarizeAppOptions, 'appPath'>;
 export type NotarizeOptions = NotarizeStartOptions;
@@ -47,20 +51,26 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
     }
     d('zip succeeded, attempting to upload to apple');
 
+    const notarizeArgs = [
+      'altool',
+      '--notarize-app',
+      '-f',
+      zipPath,
+      '--primary-bundle-id',
+      opts.appBundleId,
+      '-u',
+      makeSecret(opts.appleId),
+      '-p',
+      makeSecret(opts.appleIdPassword),
+    ];
+
+    if (opts.ascProvider) {
+      notarizeArgs.push('-itc_provider', opts.ascProvider);
+    }
+
     const result = await spawn(
       'xcrun',
-      [
-        'altool',
-        '--notarize-app',
-        '-f',
-        zipPath,
-        '--primary-bundle-id',
-        opts.appBundleId,
-        '-u',
-        makeSecret(opts.appleId),
-        '-p',
-        makeSecret(opts.appleIdPassword),
-      ],
+      notarizeArgs,
     );
     if (result.code !== 0) {
       throw new Error(`Failed to upload app to Apples notarization servers\n\n${result.output}`);
@@ -152,12 +162,14 @@ export async function notarize({
   appPath,
   appleId,
   appleIdPassword,
+  ascProvider,
 }: NotarizeOptions) {
   const { uuid } = await startNotarize({
     appBundleId,
     appPath,
     appleId,
     appleIdPassword,
+    ascProvider,
   });
   await waitForNotarize({ uuid, appleId, appleIdPassword });
   await stapleApp({ appPath });
