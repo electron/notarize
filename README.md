@@ -55,7 +55,7 @@ to Application Loader from Xcode) .  E.g.
 const password = `@keychain:"Application Loader: ${appleId}"`;
 ```
 
-Or you can add a new keychain item using the Keychain Access app, or from the command line using the security utility: 
+Another option is that you can add a new keychain item using either the Keychain Access app or from the command line using the `security` utility: 
 
 ```shell
 security add-generic-password -a "AC_USERNAME" -w <app_specific_password> -s "AC_PASSWORD"
