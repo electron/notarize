@@ -41,7 +41,7 @@ For notarization, you need the following things:
 
 1. Xcode 10 or later installed on your Mac.
 2. An [Apple Developer](https://developer.apple.com/) account.
-3. [A one-time password for your ADC account’s Apple ID](https://support.apple.com/HT204397).
+3. [An app-specific password for your ADC account’s Apple ID](https://support.apple.com/HT204397).
 
 
 #### Safety when using `appleIdPassword`
