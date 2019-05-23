@@ -35,15 +35,37 @@ on the train early.
   * `appleIdPassword` String - The password for your apple developer account
   * `ascProvider` String (optional) - Your [Team ID](https://developer.apple.com/account/#/membership) in App Store Connect. This is necessary if you are part of multiple teams
 
+#### Prerequisites
+
+For notarization, you need the following things:
+
+1. Xcode 10 or later installed on your Mac.
+2. An [Apple Developer](https://developer.apple.com/) account.
+3. [An app-specific password for your ADC account’s Apple ID](https://support.apple.com/HT204397).
+
+
 #### Safety when using `appleIdPassword`
 
 1. Never hard code your password into your packaging scripts, use an environment
 variable at a minimum.
-2. It is possible to provide a keychain reference instead of your actual password.  E.g.
+2. It is possible to provide a keychain reference instead of your actual password (assuming that you have already logged into
+the Application Loader from Xcode).  For example:
 
 ```js
 const password = `@keychain:"Application Loader: ${appleId}"`;
 ```
+
+Another option is that you can add a new keychain item using either the Keychain Access app or from the command line using the `security` utility: 
+
+```shell
+security add-generic-password -a "AC_USERNAME" -w <app_specific_password> -s "AC_PASSWORD"
+```
+where `AC_USERNAME` should be replaced with your Apple ID, and then in your code you can use:
+
+```js
+const password = `@keychain:AC_PASSWORD`;
+```
+
 
 #### Example Usage
 
