@@ -35,7 +35,7 @@ on the train early.
   * `appleIdPassword` String - The password for your apple developer account
   * `ascProvider` String (optional) - Your [Team ID](https://developer.apple.com/account/#/membership) in App Store Connect. This is necessary if you are part of multiple teams
 
-#### Pre-requisites
+#### Prerequisites
 
 For notarization, you need the following things:
 
