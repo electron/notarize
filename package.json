@@ -11,6 +11,10 @@
     "lint": "tslint --project .",
     "prepublish": "yarn build"
   },
+  "files": [
+    "lib",
+    "README.md"
+  ],
   "devDependencies": {
     "@types/debug": "^4.1.4",
     "@types/fs-extra": "^7.0.0",
