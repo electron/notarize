@@ -60,7 +60,7 @@ Another option is that you can add a new keychain item using either the Keychain
 ```shell
 security add-generic-password -a "AC_USERNAME" -w <app_specific_password> -s "AC_PASSWORD"
 ```
-where `AC_USERNAME` should be replaced with your apple id and then in your code your can use:
+where `AC_USERNAME` should be replaced with your Apple ID, and then in your code you can use:
 
 ```js
 const password = `@keychain:AC_PASSWORD`;
