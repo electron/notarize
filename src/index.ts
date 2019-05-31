@@ -171,6 +171,12 @@ export async function notarize({
     appleIdPassword,
     ascProvider,
   });
+  // Wait for apple API to initialize the status UUID
+  await delay(2000);
   await waitForNotarize({ uuid, appleId, appleIdPassword });
   await stapleApp({ appPath });
+}
+
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
