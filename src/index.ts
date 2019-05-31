@@ -111,7 +111,7 @@ export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> 
 
   if (notarizationInfo.status === 'in progress') {
     d('still in progress, waiting 30 seconds');
-    await new Promise(r => setTimeout(r, 30000));
+    await delay(30000);
     return waitForNotarize(opts);
   }
 
@@ -171,12 +171,21 @@ export async function notarize({
     appleIdPassword,
     ascProvider,
   });
-  // Wait for apple API to initialize the status UUID
-  await delay(2000);
+  /**
+   * Wait for Apples API to initialize the status UUID
+   *
+   * If we start checking too quickly the UUID is not ready yet
+   * and this step will fail.  It takes apple a number of minutes
+   * to actually complete the job so an extra 10 second delay here
+   * is not a big deal
+   */
+  d('notarization started, waiting for 10 seconds before pinging apple for status');
+  await delay(10000);
+  d('starting to poll for notarization status');
   await waitForNotarize({ uuid, appleId, appleIdPassword });
   await stapleApp({ appPath });
 }
 
-function delay(ms: number) {
+function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
