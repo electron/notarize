@@ -43,9 +43,9 @@ For notarization, you need the following things:
 2. An [Apple Developer](https://developer.apple.com/) account.
 3. [An app-specific password for your ADC account’s Apple ID](https://support.apple.com/HT204397).
 4. Your app may need to be signed with harded-runtime and the following entitlements:
-  * com.apple.security.cs.allow-jit
-  * com.apple.security.cs.allow-unsigned-executable-memory
-  * com.apple.security.cs.allow-dyld-environment-variables
+    1. com.apple.security.cs.allow-jit
+    1. com.apple.security.cs.allow-unsigned-executable-memory
+    1. com.apple.security.cs.allow-dyld-environment-variables
 
 #### Safety when using `appleIdPassword`
 
