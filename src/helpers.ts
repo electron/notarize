@@ -33,7 +33,7 @@ class Secret {
 }
 
 export function makeSecret(s: string) {
-  return new Secret(s) as any as string;
+  return (new Secret(s) as any) as string;
 }
 
 export function isSecret(s: string) {
@@ -52,7 +52,11 @@ export interface NotarizationInfo {
 
 export function parseNotarizationInfo(info: string): NotarizationInfo {
   const out: NotarizationInfo = {} as any;
-  const matchToProperty = <K extends keyof NotarizationInfo, T extends NotarizationInfo[K]>(key: K, r: RegExp, modifier?: (s: string) => T) => {
+  const matchToProperty = <K extends keyof NotarizationInfo, T extends NotarizationInfo[K]>(
+    key: K,
+    r: RegExp,
+    modifier?: (s: string) => T,
+  ) => {
     const exec = r.exec(info);
     if (exec) {
       out[key] = modifier ? modifier(exec[1]) : exec[1];

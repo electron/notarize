@@ -31,23 +31,16 @@ export type NotarizeOptions = NotarizeStartOptions;
 
 export async function startNotarize(opts: NotarizeStartOptions): Promise<NotarizeResult> {
   d('starting notarize process for app:', opts.appPath);
-  return await withTempDir<NotarizeResult>(async (dir) => {
+  return await withTempDir<NotarizeResult>(async dir => {
     const zipPath = path.resolve(dir, `${path.basename(opts.appPath, '.app')}.zip`);
     d('zipping application to:', zipPath);
-    const zipResult = await spawn(
-      'zip',
-      [
-        '-r',
-        '-y',
-        zipPath,
-        path.basename(opts.appPath),
-      ],
-      {
-        cwd: path.dirname(opts.appPath),
-      },
-    );
+    const zipResult = await spawn('zip', ['-r', '-y', zipPath, path.basename(opts.appPath)], {
+      cwd: path.dirname(opts.appPath),
+    });
     if (zipResult.code !== 0) {
-      throw new Error(`Failed to zip application, exited with code: ${zipResult.code}\n\n${zipResult.output}`);
+      throw new Error(
+        `Failed to zip application, exited with code: ${zipResult.code}\n\n${zipResult.output}`,
+      );
     }
     d('zip succeeded, attempting to upload to Apple');
 
@@ -68,10 +61,7 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
       notarizeArgs.push('-itc_provider', opts.ascProvider);
     }
 
-    const result = await spawn(
-      'xcrun',
-      notarizeArgs,
-    );
+    const result = await spawn('xcrun', notarizeArgs);
     if (result.code !== 0) {
       throw new Error(`Failed to upload app to Apple's notarization servers\n\n${result.output}`);
     }
@@ -92,20 +82,19 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
 
 export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> {
   d('checking notarization status:', opts.uuid);
-  const result = await spawn(
-    'xcrun',
-    [
-      'altool',
-      '--notarization-info',
-      opts.uuid,
-      '-u',
-      makeSecret(opts.appleId),
-      '-p',
-      makeSecret(opts.appleIdPassword),
-    ],
-  );
+  const result = await spawn('xcrun', [
+    'altool',
+    '--notarization-info',
+    opts.uuid,
+    '-u',
+    makeSecret(opts.appleId),
+    '-p',
+    makeSecret(opts.appleIdPassword),
+  ]);
   if (result.code !== 0) {
-    throw new Error(`Failed to check status of notarization request: ${opts.uuid}\n\n${result.output}`);
+    throw new Error(
+      `Failed to check status of notarization request: ${opts.uuid}\n\n${result.output}`,
+    );
   }
   const notarizationInfo = parseNotarizationInfo(result.output);
 
@@ -136,21 +125,14 @@ Logs: ${notarizationInfo.logFileUrl}`);
 
 export async function stapleApp(opts: NotarizeStapleOptions): Promise<void> {
   d('attempting to staple app:', opts.appPath);
-  const result = await spawn(
-    'xcrun',
-    [
-      'stapler',
-      'staple',
-      '-v',
-      path.basename(opts.appPath),
-    ],
-    {
-      cwd: path.dirname(opts.appPath),
-    },
-  );
+  const result = await spawn('xcrun', ['stapler', 'staple', '-v', path.basename(opts.appPath)], {
+    cwd: path.dirname(opts.appPath),
+  });
 
   if (result.code !== 0) {
-    throw new Error(`Failed to staple your application with code: ${result.code}\n\n${result.output}`);
+    throw new Error(
+      `Failed to staple your application with code: ${result.code}\n\n${result.output}`,
+    );
   }
 
   d('staple succeeded');
