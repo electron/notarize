@@ -27,7 +27,7 @@ class Secret {
   toString() {
     return this.value;
   }
-  inpsect() {
+  inspect() {
     return '******';
   }
 }
@@ -40,7 +40,7 @@ export function isSecret(s: string) {
   return (s as any) instanceof Secret;
 }
 
-export interface NotarizionInfo {
+export interface NotarizationInfo {
   uuid: string;
   date: Date;
   status: 'invalid' | 'in progress' | 'success';
@@ -50,9 +50,9 @@ export interface NotarizionInfo {
   statusMessage?: string;
 }
 
-export function parseNotarizationInfo(info: string): NotarizionInfo {
-  const out: NotarizionInfo = {} as any;
-  const matchToProperty = <K extends keyof NotarizionInfo, T extends NotarizionInfo[K]>(key: K, r: RegExp, modifier?: (s: string) => T) => {
+export function parseNotarizationInfo(info: string): NotarizationInfo {
+  const out: NotarizationInfo = {} as any;
+  const matchToProperty = <K extends keyof NotarizationInfo, T extends NotarizationInfo[K]>(key: K, r: RegExp, modifier?: (s: string) => T) => {
     const exec = r.exec(info);
     if (exec) {
       out[key] = modifier ? modifier(exec[1]) : exec[1];

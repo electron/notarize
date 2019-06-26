@@ -49,7 +49,7 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
     if (zipResult.code !== 0) {
       throw new Error(`Failed to zip application, exited with code: ${zipResult.code}\n\n${zipResult.output}`);
     }
-    d('zip succeeded, attempting to upload to apple');
+    d('zip succeeded, attempting to upload to Apple');
 
     const notarizeArgs = [
       'altool',
@@ -73,7 +73,7 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
       notarizeArgs,
     );
     if (result.code !== 0) {
-      throw new Error(`Failed to upload app to Apples notarization servers\n\n${result.output}`);
+      throw new Error(`Failed to upload app to Apple's notarization servers\n\n${result.output}`);
     }
     d('upload success');
 
@@ -175,11 +175,11 @@ export async function notarize({
    * Wait for Apples API to initialize the status UUID
    *
    * If we start checking too quickly the UUID is not ready yet
-   * and this step will fail.  It takes apple a number of minutes
+   * and this step will fail.  It takes Apple a number of minutes
    * to actually complete the job so an extra 10 second delay here
    * is not a big deal
    */
-  d('notarization started, waiting for 10 seconds before pinging apple for status');
+  d('notarization started, waiting for 10 seconds before pinging Apple for status');
   await delay(10000);
   d('starting to poll for notarization status');
   await waitForNotarize({ uuid, appleId, appleIdPassword });
