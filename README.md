@@ -42,7 +42,7 @@ For notarization, you need the following things:
 1. Xcode 10 or later installed on your Mac.
 2. An [Apple Developer](https://developer.apple.com/) account.
 3. [An app-specific password for your ADC account’s Apple ID](https://support.apple.com/HT204397).
-4. Your app may need to be signed with harded-runtime and the following entitlements:
+4. Your app may need to be signed with hardened-runtime and the following entitlements:
     1. com.apple.security.cs.allow-jit
     1. com.apple.security.cs.allow-unsigned-executable-memory
     1. com.apple.security.cs.allow-dyld-environment-variables
