@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "lint": "tslint --project .",
+    "lint": "prettier --check \"src/**/*.ts\"",
     "prepublish": "yarn build"
   },
   "files": [
@@ -19,8 +19,7 @@
     "@types/debug": "^4.1.4",
     "@types/fs-extra": "^7.0.0",
     "electron": "^5.0.2",
-    "tslint": "^5.16.0",
-    "tslint-config-airbnb": "^5.11.1",
+    "prettier": "1.18.2",
     "typescript": "^3.4.5"
   },
   "dependencies": {
