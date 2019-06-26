@@ -2,6 +2,7 @@ import * as debug from 'debug';
 import * as fs from 'fs-extra';
 import * as os from 'os';
 import * as path from 'path';
+import { spawn } from './spawn';
 
 const d = debug('electron-notarize:helpers');
 
@@ -70,4 +71,26 @@ export function parseNotarizationInfo(info: string): NotarizionInfo {
   }
 
   return out;
+}
+
+export async function zipApp(dir: string, appPath: string){
+  const zipPath = path.resolve(dir, `${path.basename(appPath, '.app')}.zip`);
+  d('zipping application to:', zipPath);
+  const zipResult = await spawn(
+    'zip',
+    [
+      '-r',
+      '-y',
+      zipPath,
+      path.basename(appPath),
+    ],
+    {
+      cwd: path.dirname(appPath),
+    },
+  );
+  if (zipResult.code !== 0) {
+    throw new Error(`Failed to zip application, exited with code: ${zipResult.code}\n\n${zipResult.output}`);
+  }
+  d('zip succeeded, attempting to upload to apple');
+  return zipPath
 }

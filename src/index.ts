@@ -2,7 +2,7 @@ import * as debug from 'debug';
 import * as path from 'path';
 
 import { spawn } from './spawn';
-import { withTempDir, makeSecret, parseNotarizationInfo } from './helpers';
+import { withTempDir, makeSecret, parseNotarizationInfo, zipApp } from './helpers';
 
 const d = debug('electron-notarize');
 
@@ -31,31 +31,17 @@ export type NotarizeOptions = NotarizeStartOptions;
 
 export async function startNotarize(opts: NotarizeStartOptions): Promise<NotarizeResult> {
   d('starting notarize process for app:', opts.appPath);
+  var appPath = opts.appPath;
   return await withTempDir<NotarizeResult>(async (dir) => {
-    const zipPath = path.resolve(dir, `${path.basename(opts.appPath, '.app')}.zip`);
-    d('zipping application to:', zipPath);
-    const zipResult = await spawn(
-      'zip',
-      [
-        '-r',
-        '-y',
-        zipPath,
-        path.basename(opts.appPath),
-      ],
-      {
-        cwd: path.dirname(opts.appPath),
-      },
-    );
-    if (zipResult.code !== 0) {
-      throw new Error(`Failed to zip application, exited with code: ${zipResult.code}\n\n${zipResult.output}`);
-    }
-    d('zip succeeded, attempting to upload to apple');
-
+  //zip the app unless it is dmg
+  if ( !opts.appPath.endsWith(`.dmg`) ){
+    appPath = await zipApp(dir, opts.appPath);
+  }
     const notarizeArgs = [
       'altool',
       '--notarize-app',
       '-f',
-      zipPath,
+      appPath,
       '--primary-bundle-id',
       opts.appBundleId,
       '-u',
