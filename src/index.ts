@@ -189,7 +189,7 @@ export async function notarize({
    * and this step will fail.  It takes Apple a number of minutes
    * to actually complete the job so an extra delay here is necessary
    */
-  d(`notarization started, waiting for ${initDelay} seconds before pinging Apple for status`);
+  d(`notarization started, waiting for ${initDelay/1000} seconds before pinging Apple for status`);
   await delay(initDelay);
   d('starting to poll for notarization status');
   await waitForNotarize({ uuid, appleId, appleIdPassword, initDelay});
