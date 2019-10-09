@@ -86,26 +86,17 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
 
 export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> {
 
-  const RequestUUID_NOT_FOUND_ERROR_MSG: string = 'Could not find the RequestUUID';
+  const REQUEST_UUID_NOT_FOUND_ERROR_MSG: string = 'Could not find the RequestUUID';
   var retry: number = 0;
-
+  var result = undefined;
   d('checking notarization status:', opts.uuid);
-  var result = await spawn('xcrun', [
-    'altool',
-    '--notarization-info',
-    opts.uuid,
-    '-u',
-    makeSecret(opts.appleId),
-    '-p',
-    makeSecret(opts.appleIdPassword),
-  ]);
 
   // retry up to 10 times if getting 'Could not find the RequestUUID' error
   // sometimes this is because service delay on apple service
-  while ((retry < 10) && (result.output.includes(RequestUUID_NOT_FOUND_ERROR_MSG))) {
-    d(`waiting for ${opts.initDelay/1000} seconds before pinging Apple for status`);
-    await delay(opts.initDelay);
-    d(`retry #${retry}: pinging Apple for status with UUID`);
+  do {
+    if (retry > 0) {
+      d(`waiting for ${opts.initDelay / 1000} seconds before pinging Apple for status`);
+    }
     result = await spawn('xcrun', [
       'altool',
       '--notarization-info',
@@ -115,8 +106,8 @@ export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> 
       '-p',
       makeSecret(opts.appleIdPassword),
     ]);
-    retry++;
-  }
+    retry += 1;
+  } while ((retry < 10) && (result.output.includes(REQUEST_UUID_NOT_FOUND_ERROR_MSG)));
 
   if ((result.code !== 0)) {
     throw new Error(
@@ -172,7 +163,7 @@ export async function notarize({
   appleId,
   appleIdPassword,
   ascProvider,
-  initDelay=10000
+  initDelay = 10000,
 }: NotarizeOptions) {
   const { uuid } = await startNotarize({
     appBundleId,
@@ -180,7 +171,7 @@ export async function notarize({
     appleId,
     appleIdPassword,
     ascProvider,
-    initDelay
+    initDelay,
   });
   /**
    * Wait for Apples API to initialize the status UUID
