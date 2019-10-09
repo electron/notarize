@@ -24,8 +24,12 @@ export interface NotarizeResult {
   uuid: string;
 }
 
-export type NotarizeStartOptions = NotarizeAppOptions & NotarizeCredentials & TransporterOptions;
-export type NotarizeWaitOptions = NotarizeResult & NotarizeCredentials;
+export interface NotarizeInitDelayOptions {
+  initDelay: number;
+}
+
+export type NotarizeStartOptions = NotarizeAppOptions & NotarizeCredentials & TransporterOptions & NotarizeInitDelayOptions;
+export type NotarizeWaitOptions = NotarizeResult & NotarizeCredentials & NotarizeInitDelayOptions;
 export type NotarizeStapleOptions = Pick<NotarizeAppOptions, 'appPath'>;
 export type NotarizeOptions = NotarizeStartOptions;
 
@@ -81,8 +85,12 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
 }
 
 export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> {
+
+  var RequestUUID_NOT_FOUND_ERROR_MSG: string = 'Could not find the RequestUUID';
+  var retry: number = 0;
+
   d('checking notarization status:', opts.uuid);
-  const result = await spawn('xcrun', [
+  var result = await spawn('xcrun', [
     'altool',
     '--notarization-info',
     opts.uuid,
@@ -91,7 +99,26 @@ export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> 
     '-p',
     makeSecret(opts.appleIdPassword),
   ]);
-  if (result.code !== 0) {
+
+  // retry up to 10 times if getting 'Could not find the RequestUUID' error
+  // sometimes this is because service delay on apple service
+  while ((retry < 10) && (result.output.includes(RequestUUID_NOT_FOUND_ERROR_MSG))) {
+    d(`waiting for ${opts.initDelay} seconds before pinging Apple for status`);
+    await delay(opts.initDelay);
+    d(`retry #${retry}: pinging Apple for status with UUID`);
+    result = await spawn('xcrun', [
+      'altool',
+      '--notarization-info',
+      opts.uuid,
+      '-u',
+      makeSecret(opts.appleId),
+      '-p',
+      makeSecret(opts.appleIdPassword),
+    ]);
+    retry++;
+  }
+
+  if ((result.code !== 0)) {
     throw new Error(
       `Failed to check status of notarization request: ${opts.uuid}\n\n${result.output}`,
     );
@@ -145,6 +172,7 @@ export async function notarize({
   appleId,
   appleIdPassword,
   ascProvider,
+  initDelay=10000
 }: NotarizeOptions) {
   const { uuid } = await startNotarize({
     appBundleId,
@@ -152,19 +180,19 @@ export async function notarize({
     appleId,
     appleIdPassword,
     ascProvider,
+    initDelay
   });
   /**
    * Wait for Apples API to initialize the status UUID
    *
    * If we start checking too quickly the UUID is not ready yet
    * and this step will fail.  It takes Apple a number of minutes
-   * to actually complete the job so an extra 10 second delay here
-   * is not a big deal
+   * to actually complete the job so an extra delay here is necessary
    */
-  d('notarization started, waiting for 10 seconds before pinging Apple for status');
-  await delay(10000);
+  d(`notarization started, waiting for ${initDelay} seconds before pinging Apple for status`);
+  await delay(initDelay);
   d('starting to poll for notarization status');
-  await waitForNotarize({ uuid, appleId, appleIdPassword });
+  await waitForNotarize({ uuid, appleId, appleIdPassword, initDelay});
   await stapleApp({ appPath });
 }
 

@@ -34,6 +34,8 @@ on the train early.
   * `appleId` String - The username of your apple developer account
   * `appleIdPassword` String - The password for your apple developer account
   * `ascProvider` String (optional) - Your [Team ID](https://developer.apple.com/account/#/membership) in App Store Connect. This is necessary if you are part of multiple teams
+  * `initDelay` Number (optional) - Time (in milliseconds) to wait before query notarization status from apple with UUID. By default
+  it is set to 10 seconds (10000)
 
 #### Prerequisites
 
@@ -80,6 +82,7 @@ async function packageTask () {
     appleId,
     appleIdPassword,
     ascProvider, // This parameter is optional
+    initDelay,   // This parameter is optional
   });
 }
 ```
