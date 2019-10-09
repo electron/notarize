@@ -86,7 +86,7 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
 
 export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> {
 
-  var RequestUUID_NOT_FOUND_ERROR_MSG: string = 'Could not find the RequestUUID';
+  const RequestUUID_NOT_FOUND_ERROR_MSG: string = 'Could not find the RequestUUID';
   var retry: number = 0;
 
   d('checking notarization status:', opts.uuid);
