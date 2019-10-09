@@ -103,7 +103,7 @@ export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> 
   // retry up to 10 times if getting 'Could not find the RequestUUID' error
   // sometimes this is because service delay on apple service
   while ((retry < 10) && (result.output.includes(RequestUUID_NOT_FOUND_ERROR_MSG))) {
-    d(`waiting for ${opts.initDelay} seconds before pinging Apple for status`);
+    d(`waiting for ${opts.initDelay/1000} seconds before pinging Apple for status`);
     await delay(opts.initDelay);
     d(`retry #${retry}: pinging Apple for status with UUID`);
     result = await spawn('xcrun', [
