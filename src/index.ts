@@ -92,9 +92,16 @@ export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> 
     makeSecret(opts.appleIdPassword),
   ]);
   if (result.code !== 0) {
-    throw new Error(
-      `Failed to check status of notarization request: ${opts.uuid}\n\n${result.output}`,
+    // These checks could fail for all sorts of reasons, including:
+    //  * The status of a request isn't available as soon as the upload request returns, so
+    //    it may just not be ready yet.
+    //  * If using keychain password, user's mac went to sleep and keychain locked.
+    //  * Regular old connectivity failure.
+    d(
+      `Failed to check status of notarization request, retrying in 30 seconds: ${opts.uuid}\n\n${result.output}`,
     );
+    await delay(30000);
+    return waitForNotarize(opts);
   }
   const notarizationInfo = parseNotarizationInfo(result.output);
 
