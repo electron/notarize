@@ -6,10 +6,17 @@ import { withTempDir, makeSecret, parseNotarizationInfo } from './helpers';
 
 const d = debug('electron-notarize');
 
-export interface NotarizeCredentials {
+export interface NotarizePasswordCredentials {
   appleId: string;
   appleIdPassword: string;
 }
+
+export interface NotarizeApiKeyCredentials {
+  appleApiKey: string;
+  appleApiIssuer: string;
+}
+
+export type NotarizeCredentials = NotarizePasswordCredentials | NotarizeApiKeyCredentials;
 
 export interface NotarizeAppOptions {
   appPath: string;
@@ -28,6 +35,24 @@ export type NotarizeStartOptions = NotarizeAppOptions & NotarizeCredentials & Tr
 export type NotarizeWaitOptions = NotarizeResult & NotarizeCredentials;
 export type NotarizeStapleOptions = Pick<NotarizeAppOptions, 'appPath'>;
 export type NotarizeOptions = NotarizeStartOptions;
+
+function authorizationArgs(opts: NotarizeCredentials): string[] {
+  if ('appleId' in opts) {
+    return [
+      '-u',
+      makeSecret(opts.appleId),
+      '-p',
+      makeSecret(opts.appleIdPassword),
+    ]
+  } else {
+    return [
+      '--apiKey',
+      makeSecret(opts.appleApiKey),
+      '--apiIssuer',
+      makeSecret(opts.appleApiIssuer),
+    ]
+  }
+}
 
 export async function startNotarize(opts: NotarizeStartOptions): Promise<NotarizeResult> {
   d('starting notarize process for app:', opts.appPath);
@@ -51,10 +76,7 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
       zipPath,
       '--primary-bundle-id',
       opts.appBundleId,
-      '-u',
-      makeSecret(opts.appleId),
-      '-p',
-      makeSecret(opts.appleIdPassword),
+      ...authorizationArgs(opts)
     ];
 
     if (opts.ascProvider) {
@@ -86,10 +108,7 @@ export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> 
     'altool',
     '--notarization-info',
     opts.uuid,
-    '-u',
-    makeSecret(opts.appleId),
-    '-p',
-    makeSecret(opts.appleIdPassword),
+    ...authorizationArgs(opts)
   ]);
   if (result.code !== 0) {
     throw new Error(
@@ -142,16 +161,14 @@ export async function stapleApp(opts: NotarizeStapleOptions): Promise<void> {
 export async function notarize({
   appBundleId,
   appPath,
-  appleId,
-  appleIdPassword,
   ascProvider,
+  ...authOptions
 }: NotarizeOptions) {
   const { uuid } = await startNotarize({
     appBundleId,
     appPath,
-    appleId,
-    appleIdPassword,
     ascProvider,
+    ...authOptions
   });
   /**
    * Wait for Apples API to initialize the status UUID
@@ -164,7 +181,7 @@ export async function notarize({
   d('notarization started, waiting for 10 seconds before pinging Apple for status');
   await delay(10000);
   d('starting to poll for notarization status');
-  await waitForNotarize({ uuid, appleId, appleIdPassword });
+  await waitForNotarize({ uuid, ...authOptions });
   await stapleApp({ appPath });
 }
 
