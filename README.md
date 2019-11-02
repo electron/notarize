@@ -31,9 +31,13 @@ on the train early.
 * `options` Object
   * `appBundleId` String - The app bundle identifier your Electron app is using.  E.g. `com.github.electron`
   * `appPath` String - The absolute path to your `.app` file
-  * `appleId` String - The username of your apple developer account
-  * `appleIdPassword` String - The password for your apple developer account
   * `ascProvider` String (optional) - Your [Team Short Name](https://forums.developer.apple.com/thread/113798). This is necessary if you are part of multiple teams, you can find it out by running `iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD`
+  * There are two methods available: user name with password:
+    * `appleId` String - The username of your apple developer account
+    * `appleIdPassword` String - The password for your apple developer account
+  * ... or apiKey with apiIssuer:
+    * `appleApiKey` String - Required for JWT authentication. See Note on JWT authentication below.
+    * `appleApiIssuer` String - Issuer ID. Required if `appleApiKey` is specified.
 
 #### Prerequisites
 
@@ -68,6 +72,12 @@ where `AC_USERNAME` should be replaced with your Apple ID, and then in your code
 const password = `@keychain:AC_PASSWORD`;
 ```
 
+#### Notes on JWT authentication
+
+You can obtain an API key from [Appstore Connect](https://appstoreconnect.apple.com/access/api). Create a key with _App Manager_ access. Note down the Issuer ID and download the `.p8` file. This file is your Api key and comes with the name of `AuthKey_<api_key>.p8`. This is the string you have to supply when calling `notarize`.
+
+Based on the `ApiKey` `altool` will look in the following places for that file:  
+`./private_keys`, `~/private_keys`, `~/.private_keys` and `~/.appstoreconnect/private_keys`.
 
 #### Example Usage
 
