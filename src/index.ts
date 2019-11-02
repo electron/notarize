@@ -38,19 +38,14 @@ export type NotarizeOptions = NotarizeStartOptions;
 
 function authorizationArgs(opts: NotarizeCredentials): string[] {
   if ('appleId' in opts) {
-    return [
-      '-u',
-      makeSecret(opts.appleId),
-      '-p',
-      makeSecret(opts.appleIdPassword),
-    ]
+    return ['-u', makeSecret(opts.appleId), '-p', makeSecret(opts.appleIdPassword)];
   } else {
     return [
       '--apiKey',
       makeSecret(opts.appleApiKey),
       '--apiIssuer',
       makeSecret(opts.appleApiIssuer),
-    ]
+    ];
   }
 }
 
@@ -76,7 +71,7 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
       zipPath,
       '--primary-bundle-id',
       opts.appBundleId,
-      ...authorizationArgs(opts)
+      ...authorizationArgs(opts),
     ];
 
     if (opts.ascProvider) {
@@ -108,7 +103,7 @@ export async function waitForNotarize(opts: NotarizeWaitOptions): Promise<void> 
     'altool',
     '--notarization-info',
     opts.uuid,
-    ...authorizationArgs(opts)
+    ...authorizationArgs(opts),
   ]);
   if (result.code !== 0) {
     // These checks could fail for all sorts of reasons, including:
@@ -175,7 +170,7 @@ export async function notarize({
     appBundleId,
     appPath,
     ascProvider,
-    ...authOptions
+    ...authOptions,
   });
   /**
    * Wait for Apples API to initialize the status UUID
