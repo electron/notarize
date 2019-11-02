@@ -1,27 +1,18 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
-		"target": "es5",
+		"target": "es2015",
 		"outDir": "lib",
-		"lib": [
-			"es6",
-			"dom",
-			"es7"
-		],
 		"sourceMap": true,
 		"rootDir": "src",
-		"jsx": "react",
 		"experimentalDecorators": true,
 		"strictNullChecks": true,
 		"noUnusedLocals": true,
 		"noImplicitThis": true,
 		"noImplicitAny": true,
 		"noImplicitUseStrict": true,
-		"declaration": true
-	},
-	"exclude": [
-		"node_modules",
-		"public",
-		"lib"
-	]
+		"declaration": true,
+		"skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+	}
 }

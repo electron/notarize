@@ -51,11 +51,11 @@ export interface NotarizationInfo {
 }
 
 export function parseNotarizationInfo(info: string): NotarizationInfo {
-  const out: NotarizationInfo = {} as any;
-  const matchToProperty = <K extends keyof NotarizationInfo, T extends NotarizationInfo[K]>(
+  const out = {} as any;
+  const matchToProperty = <K extends keyof NotarizationInfo>(
     key: K,
     r: RegExp,
-    modifier?: (s: string) => T,
+    modifier?: (s: string) => NotarizationInfo[K],
   ) => {
     const exec = r.exec(info);
     if (exec) {

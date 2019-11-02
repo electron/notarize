@@ -5,7 +5,7 @@ import { isSecret } from './helpers';
 const d = debug('electron-notarize:spawn');
 
 export interface SpawnResult {
-  code: number;
+  code: number | null;
   output: string;
 }
 
@@ -25,8 +25,8 @@ export const spawn = (
   const child = cpSpawn(cmd, args, opts);
   const out: string[] = [];
   const dataHandler = (data: Buffer) => out.push(data.toString());
-  child.stdout.on('data', dataHandler);
-  child.stderr.on('data', dataHandler);
+  child.stdout!.on('data', dataHandler);
+  child.stderr!.on('data', dataHandler);
   return new Promise<SpawnResult>(resolve => {
     child.on('exit', code => {
       d(`cmd ${cmd} terminated with code: ${code}`);
