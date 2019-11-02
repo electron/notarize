@@ -1,6 +1,6 @@
 {
   "name": "electron-notarize",
-  "version": "0.2.0",
+  "version": "0.0.0-development",
   "description": "Notarize your Electron app",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -16,9 +16,10 @@
     "README.md"
   ],
   "devDependencies": {
-    "@types/node": "^12.12.5",
+    "@continuous-auth/semantic-release-npm": "^1.0.3",
     "@types/debug": "^4.1.5",
     "@types/fs-extra": "^8.0.1",
+    "@types/node": "^12.12.5",
     "electron": "^7.0.1",
     "prettier": "^1.18.2",
     "typescript": "^3.6.4"
