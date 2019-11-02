@@ -31,7 +31,7 @@ on the train early.
 * `options` Object
   * `appBundleId` String - The app bundle identifier your Electron app is using.  E.g. `com.github.electron`
   * `appPath` String - The absolute path to your `.app` file
-  * `ascProvider` String (optional) - Your [Team ID](https://developer.apple.com/account/#/membership) in App Store Connect. This is necessary if you are part of multiple teams
+  * `ascProvider` String (optional) - Your [Team Short Name](https://forums.developer.apple.com/thread/113798). This is necessary if you are part of multiple teams, you can find it out by running `iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD`
   * There are two methods available: user name with password:
     * `appleId` String - The username of your apple developer account
     * `appleIdPassword` String - The password for your apple developer account
@@ -46,7 +46,9 @@ For notarization, you need the following things:
 1. Xcode 10 or later installed on your Mac.
 2. An [Apple Developer](https://developer.apple.com/) account.
 3. [An app-specific password for your ADC account’s Apple ID](https://support.apple.com/HT204397).
-
+4. Your app may need to be signed with hardened-runtime and the following entitlements:
+    1. com.apple.security.cs.allow-jit
+    1. com.apple.security.cs.allow-unsigned-executable-memory
 
 #### Safety when using `appleIdPassword`
 
