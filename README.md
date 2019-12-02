@@ -31,7 +31,7 @@ on the train early.
 * `options` Object
   * `appBundleId` String - The app bundle identifier your Electron app is using.  E.g. `com.github.electron`
   * `appPath` String - The absolute path to your `.app` file
-  * `ascProvider` String (optional) - Your [Team Short Name](https://forums.developer.apple.com/thread/113798). This is necessary if you are part of multiple teams, you can find it out by running `iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD`
+  * `ascProvider` String (optional) - Your [Team Short Name](https://forums.developer.apple.com/thread/113798). This is necessary if you are part of multiple teams, you can find it out by running `/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD`
   * There are two methods available: user name with password:
     * `appleId` String - The username of your apple developer account
     * `appleIdPassword` String - The password for your apple developer account
