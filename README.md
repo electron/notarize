@@ -31,7 +31,7 @@ on the train early.
 * `options` Object
   * `appBundleId` String - The app bundle identifier your Electron app is using.  E.g. `com.github.electron`
   * `appPath` String - The absolute path to your `.app` file
-  * `ascProvider` String (optional) - Your [Team Short Name](https://forums.developer.apple.com/thread/113798). This is necessary if you are part of multiple teams, you can find it out by running `/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD`
+  * `ascProvider` String (optional) - Your [Team Short Name](#notes-on-your-team-short-name). 
   * There are two methods available: user name with password:
     * `appleId` String - The username of your apple developer account
     * `appleIdPassword` String - The password for your apple developer account
@@ -79,6 +79,19 @@ You can obtain an API key from [Appstore Connect](https://appstoreconnect.apple.
 Based on the `ApiKey` `altool` will look in the following places for that file:  
 `./private_keys`, `~/private_keys`, `~/.private_keys` and `~/.appstoreconnect/private_keys`.
 
+#### Notes on your Team Short Name
+
+If you are a member of multiple teams or organizations, you have to tell Apple on behalf of which organization you're uploading. To find your [team's short name](https://forums.developer.apple.com/thread/113798)), you can ask `iTMSTransporter`, which is part of the now deprecated `Application Loader` as well as the newer [`Transporter`](https://apps.apple.com/us/app/transporter/id1450874784?mt=12).
+
+With `Transporter` installed, run:
+```sh
+/Applications/Transporter.app/Contents/itms/bin/iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD
+```
+
+Alternatively, with older versions of Xcode, run:
+```sh
+/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD
+```
 #### Example Usage
 
 ```js
