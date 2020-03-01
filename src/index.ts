@@ -36,8 +36,59 @@ export type NotarizeWaitOptions = NotarizeResult & NotarizeCredentials;
 export type NotarizeStapleOptions = Pick<NotarizeAppOptions, 'appPath'>;
 export type NotarizeOptions = NotarizeStartOptions;
 
-function authorizationArgs(opts: NotarizeCredentials): string[] {
-  if ('appleId' in opts) {
+function isPasswordCredentials(opts: NotarizeCredentials): opts is NotarizePasswordCredentials {
+  const creds = opts as NotarizePasswordCredentials;
+  return creds.appleId !== undefined || creds.appleIdPassword !== undefined;
+}
+
+function isApiKeyCredentials(opts: NotarizeCredentials): opts is NotarizeApiKeyCredentials {
+  const creds = opts as NotarizeApiKeyCredentials;
+  return creds.appleApiKey !== undefined || creds.appleApiIssuer !== undefined;
+}
+
+export function validateAuthorizationArgs(opts: NotarizeCredentials): NotarizeCredentials {
+  const passwordCreds = opts as NotarizePasswordCredentials;
+  const apiKeyCreds = opts as NotarizeApiKeyCredentials;
+
+  const isPassword = isPasswordCredentials(opts);
+  const isApiKey = isApiKeyCredentials(opts);
+  if (isPassword && isApiKey) {
+    throw new Error('Mixed authentication properties appleId and appleApiKey');
+  }
+  if (isPassword) {
+    if (!passwordCreds.appleId) {
+      throw new Error(
+        'The appleId property is required when using notarization with appleIdPassword',
+      );
+    }
+
+    if (!passwordCreds.appleIdPassword) {
+      throw new Error(
+        'The appleIdPassword property is required when using notarization with appleId',
+      );
+    }
+    return passwordCreds;
+  }
+  if (isApiKey) {
+    if (!apiKeyCreds.appleApiKey) {
+      throw new Error(
+        'The appleApiKey property is required when using notarization with appleApiIssuer',
+      );
+    }
+
+    if (!apiKeyCreds.appleApiIssuer) {
+      throw new Error(
+        'The appleApiIssuer property is required when using notarization with appleApiKey',
+      );
+    }
+    return apiKeyCreds;
+  }
+  throw new Error('No authentication properties provided (e.g. appleId, appleApiKey)');
+}
+
+function authorizationArgs(rawOpts: NotarizeCredentials): string[] {
+  const opts = validateAuthorizationArgs(rawOpts);
+  if (isPasswordCredentials(opts)) {
     return ['-u', makeSecret(opts.appleId), '-p', makeSecret(opts.appleIdPassword)];
   } else {
     return [
