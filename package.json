@@ -9,11 +9,10 @@
   "scripts": {
     "build": "tsc",
     "lint": "prettier --check \"src/**/*.ts\"",
-    "prepublish": "yarn build"
+    "prepare": "yarn build"
   },
   "files": [
-    "lib",
-    "README.md"
+    "lib"
   ],
   "devDependencies": {
     "@continuous-auth/semantic-release-npm": "^2.0.0",
