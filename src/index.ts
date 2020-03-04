@@ -47,22 +47,18 @@ function isApiKeyCredentials(opts: NotarizeCredentials): opts is NotarizeApiKeyC
 }
 
 export function validateAuthorizationArgs(opts: NotarizeCredentials): NotarizeCredentials {
-  const passwordCreds = opts as NotarizePasswordCredentials;
-  const apiKeyCreds = opts as NotarizeApiKeyCredentials;
-
   const isPassword = isPasswordCredentials(opts);
   const isApiKey = isApiKeyCredentials(opts);
   if (isPassword && isApiKey) {
-    throw new Error('Mixed authentication properties appleId and appleApiKey');
+    throw new Error('Cannot use both password credentials and API key credentials at once');
   }
   if (isPassword) {
+    const passwordCreds = opts as NotarizePasswordCredentials;
     if (!passwordCreds.appleId) {
       throw new Error(
         'The appleId property is required when using notarization with appleIdPassword',
       );
-    }
-
-    if (!passwordCreds.appleIdPassword) {
+    } else if (!passwordCreds.appleIdPassword) {
       throw new Error(
         'The appleIdPassword property is required when using notarization with appleId',
       );
@@ -70,13 +66,12 @@ export function validateAuthorizationArgs(opts: NotarizeCredentials): NotarizeCr
     return passwordCreds;
   }
   if (isApiKey) {
+    const apiKeyCreds = opts as NotarizeApiKeyCredentials;
     if (!apiKeyCreds.appleApiKey) {
       throw new Error(
         'The appleApiKey property is required when using notarization with appleApiIssuer',
       );
-    }
-
-    if (!apiKeyCreds.appleApiIssuer) {
+    } else if (!apiKeyCreds.appleApiIssuer) {
       throw new Error(
         'The appleApiIssuer property is required when using notarization with appleApiKey',
       );
