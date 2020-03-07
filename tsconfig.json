@@ -14,5 +14,8 @@
 		"declaration": true,
 		"skipDefaultLibCheck": true,
     "skipLibCheck": true,
-	}
+	},
+	"include": [
+		"src/**/*"
+	],
 }
