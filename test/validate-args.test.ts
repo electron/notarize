@@ -2,8 +2,8 @@ import {
   NotarizeApiKeyCredentials,
   NotarizeCredentials,
   NotarizePasswordCredentials,
-  validateAuthorizationArgs,
 } from '../src/index';
+import { validateAuthorizationArgs } from '../src/validate-args';
 
 describe('index', () => {
   describe('validateAuthorizationArgs', () => {
