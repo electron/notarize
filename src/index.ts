@@ -3,8 +3,11 @@ import * as path from 'path';
 
 import { spawn } from './spawn';
 import { withTempDir, makeSecret, parseNotarizationInfo } from './helpers';
+import { validateAuthorizationArgs, isPasswordCredentials } from './validate-args';
 
 const d = debug('electron-notarize');
+
+export { validateAuthorizationArgs } from './validate-args';
 
 export interface NotarizePasswordCredentials {
   appleId: string;
@@ -36,8 +39,9 @@ export type NotarizeWaitOptions = NotarizeResult & NotarizeCredentials;
 export type NotarizeStapleOptions = Pick<NotarizeAppOptions, 'appPath'>;
 export type NotarizeOptions = NotarizeStartOptions;
 
-function authorizationArgs(opts: NotarizeCredentials): string[] {
-  if ('appleId' in opts) {
+function authorizationArgs(rawOpts: NotarizeCredentials): string[] {
+  const opts = validateAuthorizationArgs(rawOpts);
+  if (isPasswordCredentials(opts)) {
     return ['-u', makeSecret(opts.appleId), '-p', makeSecret(opts.appleIdPassword)];
   } else {
     return [
