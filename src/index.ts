@@ -1,5 +1,6 @@
 import * as debug from 'debug';
 import * as path from 'path';
+import pRetry from 'p-retry';
 
 import { spawn } from './spawn';
 import { withTempDir, makeSecret, parseNotarizationInfo } from './helpers';
@@ -82,17 +83,19 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
       notarizeArgs.push('-itc_provider', opts.ascProvider);
     }
 
-    async function retryingUpload() {
-      for (let i = 0; i < 5; i++) {
+    const result = await pRetry(
+      async () => {
         const result = await spawn('xcrun', notarizeArgs);
-        if (result.code === 0) return result;
-        d(`upload failed, retrying\n\n${result.output}`);
-        await delay(5000);
-      }
-      throw new Error(`Failed to upload app to Apple's notarization servers\n\n${result.output}`);
-    }
+        if (result.code !== 0) {
+          throw new pRetry.AbortError(
+            `Failed to upload app to Apple's notarization servers\n\n${result.output}`,
+          );
+        }
+        return result;
+      },
+      { retries: 5 },
+    );
 
-    const result = await retryingUpload();
     d('upload success');
 
     const uuidMatch = /\nRequestUUID = (.+?)\n/g.exec(result.output);
