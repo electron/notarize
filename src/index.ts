@@ -82,10 +82,17 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
       notarizeArgs.push('-itc_provider', opts.ascProvider);
     }
 
-    const result = await spawn('xcrun', notarizeArgs);
-    if (result.code !== 0) {
+    async function retryingUpload() {
+      for (let i = 0; i < 5; i++) {
+        const result = await spawn('xcrun', notarizeArgs);
+        if (result.code === 0) return result;
+        d(`upload failed, retrying\n\n${result.output}`);
+        await delay(5000);
+      }
       throw new Error(`Failed to upload app to Apple's notarization servers\n\n${result.output}`);
     }
+
+    const result = await retryingUpload();
     d('upload success');
 
     const uuidMatch = /\nRequestUUID = (.+?)\n/g.exec(result.output);
