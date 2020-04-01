@@ -1,6 +1,6 @@
 import * as debug from 'debug';
 import * as path from 'path';
-import pRetry from 'p-retry';
+import * as pRetry from 'p-retry';
 
 import { spawn } from './spawn';
 import { withTempDir, makeSecret, parseNotarizationInfo } from './helpers';
