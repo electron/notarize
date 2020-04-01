@@ -83,17 +83,15 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
       notarizeArgs.push('-itc_provider', opts.ascProvider);
     }
 
-    async function uploadFile() {
+    async function uploadApp() {
       const result = await spawn('xcrun', notarizeArgs);
       if (result.code !== 0) {
-        throw new pRetry.AbortError(
-          `Failed to upload app to Apple's notarization servers\n\n${result.output}`,
-        );
+        throw new Error(`Failed to upload app to Apple's notarization servers\n\n${result.output}`);
       }
       return result;
     }
 
-    const result = await pRetry(uploadFile, { retries: 5 });
+    const result = await pRetry(uploadApp, { retries: 5 });
 
     d('upload success');
 
