@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "author": "Samuel Attard",
+  "homepage": "https://github.com/electron/electron-notarize",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
