@@ -47,7 +47,7 @@ For notarization, you need the following things:
   * `ascProvider` String (optional) - Your [Team Short Name](#notes-on-your-team-short-name). 
   * There are two methods available: user name with password:
     * `appleId` String - The username of your apple developer account
-    * `appleIdPassword` String - The password for your apple developer account
+    * `appleIdPassword` String - The [app-specific password](https://support.apple.com/HT204397) (not your Apple ID password).  
   * ... or apiKey with apiIssuer:
     * `appleApiKey` String - Required for JWT authentication. See Note on JWT authentication below.
     * `appleApiIssuer` String - Issuer ID. Required if `appleApiKey` is specified.
