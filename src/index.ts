@@ -58,7 +58,7 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
   return await withTempDir<NotarizeResult>(async dir => {
     const zipPath = path.resolve(dir, `${path.basename(opts.appPath, '.app')}.zip`);
     d('zipping application to:', zipPath);
-    const zipResult = await spawn('zip', ['-r', '-y', zipPath, path.basename(opts.appPath)], {
+    const zipResult = await spawn('ditto', ['-c', '-k', path.basename(opts.appPath), zipPath], {
       cwd: path.dirname(opts.appPath),
     });
     if (zipResult.code !== 0) {
