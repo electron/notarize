@@ -30,11 +30,19 @@ export interface TransporterOptions {
   ascProvider?: string;
 }
 
+export interface HookOptions {
+  beforeUpload?: () => Promise<void> | void;
+  afterUpload?: () => Promise<void> | void;
+}
+
 export interface NotarizeResult {
   uuid: string;
 }
 
-export type NotarizeStartOptions = NotarizeAppOptions & NotarizeCredentials & TransporterOptions;
+export type NotarizeStartOptions = NotarizeAppOptions &
+  NotarizeCredentials &
+  TransporterOptions &
+  HookOptions;
 export type NotarizeWaitOptions = NotarizeResult & NotarizeCredentials;
 export type NotarizeStapleOptions = Pick<NotarizeAppOptions, 'appPath'>;
 export type NotarizeOptions = NotarizeStartOptions;
@@ -66,8 +74,14 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
         `Failed to zip application, exited with code: ${zipResult.code}\n\n${zipResult.output}`,
       );
     }
-    d('zip succeeded, attempting to upload to Apple');
+    d('zip succeeded');
 
+    if (opts.beforeUpload) {
+      d('awaiting beforeUpload hook');
+      await opts.beforeUpload();
+    }
+
+    d('attempting to upload to Apple');
     const notarizeArgs = [
       'altool',
       '--notarize-app',
@@ -94,6 +108,11 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
     }
 
     d('found UUID:', uuidMatch[1]);
+
+    if (opts.afterUpload) {
+      d('awaiting afterUpload hook');
+      await opts.afterUpload();
+    }
 
     return {
       uuid: uuidMatch[1],

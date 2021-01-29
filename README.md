@@ -51,6 +51,8 @@ For notarization, you need the following things:
   * ... or apiKey with apiIssuer:
     * `appleApiKey` String - Required for JWT authentication. See Note on JWT authentication below.
     * `appleApiIssuer` String - Issuer ID. Required if `appleApiKey` is specified.
+  * `beforeUpload` Function - A hook function to be called before the app upload begins.
+  * `afterUpload` Function - A hook function to be called after the app upload has completed.
 
 ## Safety when using `appleIdPassword`
 
@@ -98,6 +100,24 @@ Alternatively, with older versions of Xcode, run:
 ```sh
 /Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD
 ```
+
+## Notes on the `beforeUpload` and `afterUpload` hook functions
+
+Uploading apps for notarization can be surprisingly resource intensive. When attempting to notarize multiple apps, you may wish to limit the number of concurrent uploads. The `beforeUpload` and `afterUpload` hook functions allow you to implement such limits using whatever strategy you choose.
+
+Both hooks support async functions and will be awaited, allowing you to "pause" the notarization process at either point if desired:
+
+```javascript
+await notarize({
+  async beforeUpload () {
+    // acquire a semaphore or similar
+  },
+  async afterUpload () {
+    // release what was acquired
+  },
+});
+```
+
 ## Example Usage
 
 ```javascript
