@@ -24,25 +24,23 @@ export type NotarizeCredentials = NotarizePasswordCredentials | NotarizeApiKeyCr
 export interface NotarizeAppOptions {
   appPath: string;
   appBundleId: string;
+  lifecycle?: LifecycleOptions;
+}
+
+export interface LifecycleOptions {
+  beforeUpload?: () => Promise<void> | void;
+  afterUpload?: () => Promise<void> | void;
 }
 
 export interface TransporterOptions {
   ascProvider?: string;
 }
 
-export interface HookOptions {
-  beforeUpload?: () => Promise<void> | void;
-  afterUpload?: () => Promise<void> | void;
-}
-
 export interface NotarizeResult {
   uuid: string;
 }
 
-export type NotarizeStartOptions = NotarizeAppOptions &
-  NotarizeCredentials &
-  TransporterOptions &
-  HookOptions;
+export type NotarizeStartOptions = NotarizeAppOptions & NotarizeCredentials & TransporterOptions;
 export type NotarizeWaitOptions = NotarizeResult & NotarizeCredentials;
 export type NotarizeStapleOptions = Pick<NotarizeAppOptions, 'appPath'>;
 export type NotarizeOptions = NotarizeStartOptions;
@@ -76,9 +74,9 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
     }
     d('zip succeeded');
 
-    if (opts.beforeUpload) {
-      d('awaiting beforeUpload hook');
-      await opts.beforeUpload();
+    if (opts.lifecycle?.beforeUpload) {
+      d('awaiting beforeUpload lifecycle hook');
+      await opts.lifecycle?.beforeUpload();
     }
 
     d('attempting to upload to Apple');
@@ -109,9 +107,9 @@ export async function startNotarize(opts: NotarizeStartOptions): Promise<Notariz
 
     d('found UUID:', uuidMatch[1]);
 
-    if (opts.afterUpload) {
-      d('awaiting afterUpload hook');
-      await opts.afterUpload();
+    if (opts.lifecycle?.afterUpload) {
+      d('awaiting afterUpload lifecycle hook');
+      await opts.lifecycle?.afterUpload();
     }
 
     return {
