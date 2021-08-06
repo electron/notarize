@@ -42,15 +42,29 @@ For notarization, you need the following things:
 ### Method: `notarize(opts): Promise<void>`
 
 * `options` Object
-  * `appBundleId` String - The app bundle identifier your Electron app is using.  E.g. `com.github.electron`
+  * `tool` String - The notarization tool to use, default is `legacy`.  Can be `legacy` or `notarytool`. `notarytool` is substantially (10x) faster.
   * `appPath` String - The absolute path to your `.app` file
-  * `ascProvider` String (optional) - Your [Team Short Name](#notes-on-your-team-short-name). 
-  * There are two methods available: user name with password:
-    * `appleId` String - The username of your apple developer account
-    * `appleIdPassword` String - The [app-specific password](https://support.apple.com/HT204397) (not your Apple ID password).  
-  * ... or apiKey with apiIssuer:
-    * `appleApiKey` String - Required for JWT authentication. See Note on JWT authentication below.
-    * `appleApiIssuer` String - Issuer ID. Required if `appleApiKey` is specified.
+  * There are different options for each tool: Legacy
+    * `appBundleId` String - The app bundle identifier your Electron app is using.  E.g. `com.github.electron`
+    * `ascProvider` String (optional) - Your [Team Short Name](#notes-on-your-team-short-name).
+    * There are two authentication methods available: user name with password:
+      * `appleId` String - The username of your apple developer account
+      * `appleIdPassword` String - The [app-specific password](https://support.apple.com/HT204397) (not your Apple ID password).
+    * ... or apiKey with apiIssuer:
+      * `appleApiKey` String - Required for JWT authentication. See Note on JWT authentication below.
+      * `appleApiIssuer` String - Issuer ID. Required if `appleApiKey` is specified.
+  * ... or Notary Tool
+    * There are three authentication methods available: user name with password:
+      * `appleId` String - The username of your apple developer account
+      * `appleIdPassword` String - The [app-specific password](https://support.apple.com/HT204397) (not your Apple ID password).
+      * `teamId` String - The team ID you want to notarize under.
+    * ... or apiKey with apiIssuer:
+      * `appleApiKey` String - Required for JWT authentication. See Note on JWT authentication below.
+      * `appleApiKeyId` String - Required for JWT authentication. See Note on JWT authentication below.
+      * `appleApiIssuer` String - Issuer ID. Required if `appleApiKey` is specified.
+    * ... or keychain with keychainProfile:
+      * `keychain` String - The name of the keychain or path to the keychain you stored notarization credentials in.
+      * `keychainProfile` String - The name of the profile you provided when storing notarization credentials.
 
 ## Safety when using `appleIdPassword`
 
