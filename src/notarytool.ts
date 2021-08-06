@@ -3,7 +3,11 @@ import * as path from 'path';
 
 import { spawn } from './spawn';
 import { makeSecret, withTempDir } from './helpers';
-import { validateNotaryToolAuthorizationArgs, isNotaryToolPasswordCredentials, isNotaryToolApiKeyCredentials } from './validate-args';
+import {
+  validateNotaryToolAuthorizationArgs,
+  isNotaryToolPasswordCredentials,
+  isNotaryToolApiKeyCredentials,
+} from './validate-args';
 import { NotaryToolCredentials, NotaryToolStartOptions } from './types';
 
 const d = debug('electron-notarize:notarytool');
@@ -11,7 +15,14 @@ const d = debug('electron-notarize:notarytool');
 function authorizationArgs(rawOpts: NotaryToolCredentials): string[] {
   const opts = validateNotaryToolAuthorizationArgs(rawOpts);
   if (isNotaryToolPasswordCredentials(opts)) {
-    return ['--apple-id', makeSecret(opts.appleId), '--password', makeSecret(opts.appleIdPassword), '--team-id', makeSecret(opts.teamId)];
+    return [
+      '--apple-id',
+      makeSecret(opts.appleId),
+      '--password',
+      makeSecret(opts.appleIdPassword),
+      '--team-id',
+      makeSecret(opts.teamId),
+    ];
   } else if (isNotaryToolApiKeyCredentials(opts)) {
     return [
       '--key',
@@ -22,12 +33,7 @@ function authorizationArgs(rawOpts: NotaryToolCredentials): string[] {
       makeSecret(opts.appleApiIssuer),
     ];
   } else {
-    return [
-      '--keychain',
-      opts.keychain,
-      '--keychain-profile',
-      opts.keychainProfile
-    ]
+    return ['--keychain', opts.keychain, '--keychain-profile', opts.keychainProfile];
   }
 }
 
@@ -62,7 +68,7 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
       ...authorizationArgs(opts),
       '--wait',
       '--output-format',
-      'json'
+      'json',
     ];
 
     const result = await spawn('xcrun', notarizeArgs);
@@ -71,7 +77,12 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
       try {
         const parsed = JSON.parse(result.output.trim());
         if (parsed && parsed.id) {
-          const logResult = await spawn('xcrun', ['notarytool', 'log', parsed.id, ...authorizationArgs(opts)]);
+          const logResult = await spawn('xcrun', [
+            'notarytool',
+            'log',
+            parsed.id,
+            ...authorizationArgs(opts),
+          ]);
           d('notarization log', logResult.output);
         }
       } catch (e) {

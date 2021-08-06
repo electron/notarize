@@ -4,7 +4,12 @@ import * as path from 'path';
 import { spawn } from './spawn';
 import { withTempDir, makeSecret, parseNotarizationInfo, delay } from './helpers';
 import { validateLegacyAuthorizationArgs, isLegacyPasswordCredentials } from './validate-args';
-import { NotarizeResult, LegacyNotarizeStartOptions, LegacyNotarizeWaitOptions, LegacyNotarizeCredentials } from './types';
+import {
+  NotarizeResult,
+  LegacyNotarizeStartOptions,
+  LegacyNotarizeWaitOptions,
+  LegacyNotarizeCredentials,
+} from './types';
 
 const d = debug('electron-notarize:legacy');
 
@@ -22,7 +27,9 @@ function authorizationArgs(rawOpts: LegacyNotarizeCredentials): string[] {
   }
 }
 
-export async function startLegacyNotarize(opts: LegacyNotarizeStartOptions): Promise<NotarizeResult> {
+export async function startLegacyNotarize(
+  opts: LegacyNotarizeStartOptions,
+): Promise<NotarizeResult> {
   d('starting notarize process for app:', opts.appPath);
   return await withTempDir<NotarizeResult>(async dir => {
     const zipPath = path.resolve(dir, `${path.basename(opts.appPath, '.app')}.zip`);

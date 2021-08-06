@@ -1,4 +1,12 @@
-import { LegacyNotarizeApiKeyCredentials, LegacyNotarizeCredentials, LegacyNotarizePasswordCredentials, NotaryToolApiKeyCredentials, NotaryToolCredentials, NotaryToolKeychainCredentials, NotaryToolPasswordCredentials } from "./types";
+import {
+  LegacyNotarizeApiKeyCredentials,
+  LegacyNotarizeCredentials,
+  LegacyNotarizePasswordCredentials,
+  NotaryToolApiKeyCredentials,
+  NotaryToolCredentials,
+  NotaryToolKeychainCredentials,
+  NotaryToolPasswordCredentials,
+} from './types';
 
 export function isLegacyPasswordCredentials(
   opts: LegacyNotarizeCredentials,
@@ -7,12 +15,16 @@ export function isLegacyPasswordCredentials(
   return creds.appleId !== undefined || creds.appleIdPassword !== undefined;
 }
 
-export function isLegacyApiKeyCredentials(opts: LegacyNotarizeCredentials): opts is LegacyNotarizeApiKeyCredentials {
+export function isLegacyApiKeyCredentials(
+  opts: LegacyNotarizeCredentials,
+): opts is LegacyNotarizeApiKeyCredentials {
   const creds = opts as LegacyNotarizeApiKeyCredentials;
   return creds.appleApiKey !== undefined || creds.appleApiIssuer !== undefined;
 }
 
-export function validateLegacyAuthorizationArgs(opts: LegacyNotarizeCredentials): LegacyNotarizeCredentials {
+export function validateLegacyAuthorizationArgs(
+  opts: LegacyNotarizeCredentials,
+): LegacyNotarizeCredentials {
   const isPassword = isLegacyPasswordCredentials(opts);
   const isApiKey = isLegacyApiKeyCredentials(opts);
   if (isPassword && isApiKey) {
@@ -51,14 +63,20 @@ export function isNotaryToolPasswordCredentials(
   opts: NotaryToolCredentials,
 ): opts is NotaryToolPasswordCredentials {
   const creds = opts as NotaryToolPasswordCredentials;
-  return creds.appleId !== undefined || creds.appleIdPassword !== undefined || creds.teamId !== undefined;
+  return (
+    creds.appleId !== undefined || creds.appleIdPassword !== undefined || creds.teamId !== undefined
+  );
 }
 
 export function isNotaryToolApiKeyCredentials(
   opts: NotaryToolCredentials,
 ): opts is NotaryToolApiKeyCredentials {
   const creds = opts as NotaryToolApiKeyCredentials;
-  return creds.appleApiIssuer !== undefined || creds.appleApiKey !== undefined || creds.appleApiKeyId !== undefined;
+  return (
+    creds.appleApiIssuer !== undefined ||
+    creds.appleApiKey !== undefined ||
+    creds.appleApiKeyId !== undefined
+  );
 }
 
 export function isNotaryToolKeychainCredentials(
@@ -68,12 +86,16 @@ export function isNotaryToolKeychainCredentials(
   return creds.keychain !== undefined || creds.keychainProfile !== undefined;
 }
 
-export function validateNotaryToolAuthorizationArgs(opts: NotaryToolCredentials): NotaryToolCredentials {
+export function validateNotaryToolAuthorizationArgs(
+  opts: NotaryToolCredentials,
+): NotaryToolCredentials {
   const isPassword = isNotaryToolPasswordCredentials(opts);
   const isApiKey = isNotaryToolApiKeyCredentials(opts);
   const isKeychain = isNotaryToolKeychainCredentials(opts);
   if ((isPassword ? 1 : 0) + (isApiKey ? 1 : 0) + (isKeychain ? 1 : 0) > 1) {
-    throw new Error('Cannot use password credentials, API key credentials and keychain credentials at once');
+    throw new Error(
+      'Cannot use password credentials, API key credentials and keychain credentials at once',
+    );
   }
   if (isPassword) {
     const passwordCreds = opts as NotaryToolPasswordCredentials;

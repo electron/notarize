@@ -25,8 +25,13 @@ export interface NotaryToolKeychainCredentials {
   keychain: string;
 }
 
-export type LegacyNotarizeCredentials = LegacyNotarizePasswordCredentials | LegacyNotarizeApiKeyCredentials;
-export type NotaryToolCredentials = NotaryToolPasswordCredentials | NotaryToolApiKeyCredentials | NotaryToolKeychainCredentials;
+export type LegacyNotarizeCredentials =
+  | LegacyNotarizePasswordCredentials
+  | LegacyNotarizeApiKeyCredentials;
+export type NotaryToolCredentials =
+  | NotaryToolPasswordCredentials
+  | NotaryToolApiKeyCredentials
+  | NotaryToolKeychainCredentials;
 export type NotarizeCredentials = LegacyNotarizeCredentials | NotaryToolCredentials;
 
 export interface LegacyNotarizeAppOptions {
@@ -46,8 +51,12 @@ export interface NotarizeResult {
   uuid: string;
 }
 
-export type LegacyNotarizeStartOptions = LegacyNotarizeAppOptions & LegacyNotarizeCredentials & TransporterOptions;
+export type LegacyNotarizeStartOptions = LegacyNotarizeAppOptions &
+  LegacyNotarizeCredentials &
+  TransporterOptions;
 export type NotaryToolStartOptions = NotaryToolNotarizeAppOptions & NotaryToolCredentials;
 export type LegacyNotarizeWaitOptions = NotarizeResult & LegacyNotarizeCredentials;
 export type NotarizeStapleOptions = Pick<LegacyNotarizeAppOptions, 'appPath'>;
-export type NotarizeOptions = ({ tool?: 'legacy'; } & LegacyNotarizeStartOptions) | ({ tool: 'notarytool' } & NotaryToolStartOptions);
+export type NotarizeOptions =
+  | ({ tool?: 'legacy' } & LegacyNotarizeStartOptions)
+  | ({ tool: 'notarytool' } & NotaryToolStartOptions);
