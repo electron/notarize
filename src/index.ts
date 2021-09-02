@@ -7,6 +7,8 @@ import { NotarizeOptions } from './types';
 
 const d = debug('electron-notarize');
 
+export { NotarizeOptions };
+
 export { validateLegacyAuthorizationArgs as validateAuthorizationArgs } from './validate-args';
 
 export async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
