@@ -33,7 +33,7 @@ function authorizationArgs(rawOpts: NotaryToolCredentials): string[] {
       makeSecret(opts.appleApiIssuer),
     ];
   } else {
-    return ['--keychain', opts.keychain, '--keychain-profile', opts.keychainProfile];
+    return ['--keychain-profile', opts.keychainProfile];
   }
 }
 
