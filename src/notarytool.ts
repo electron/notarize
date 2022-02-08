@@ -45,7 +45,7 @@ export async function isNotaryToolAvailable() {
 export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions) {
   d('starting notarize process for app:', opts.appPath);
   return await withTempDir(async dir => {
-    const zipPath = path.resolve(dir, `${path.basename(opts.appPath, '.app')}.zip`);
+    const zipPath = path.resolve(dir, `${path.parse(opts.appPath).name}.zip`);
     d('zipping application to:', zipPath);
     const zipResult = await spawn(
       'ditto',
