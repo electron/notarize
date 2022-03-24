@@ -27,7 +27,10 @@ export const spawn = (
   const dataHandler = (data: Buffer) => out.push(data.toString());
   child.stdout!.on('data', dataHandler);
   child.stderr!.on('data', dataHandler);
-  return new Promise<SpawnResult>(resolve => {
+  return new Promise<SpawnResult>((resolve, reject) => {
+    child.on('error', (err) => {
+      reject(err);
+    });
     child.on('exit', code => {
       d(`cmd ${cmd} terminated with code: ${code}`);
       resolve({
