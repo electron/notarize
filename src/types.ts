@@ -22,7 +22,7 @@ export interface NotaryToolApiKeyCredentials {
 
 export interface NotaryToolKeychainCredentials {
   keychainProfile: string;
-  keychain: string;
+  keychain?: string;
 }
 
 export type LegacyNotarizeCredentials =

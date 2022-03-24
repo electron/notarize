@@ -133,11 +133,7 @@ export function validateNotaryToolAuthorizationArgs(
   }
   if (isKeychain) {
     const keychainCreds = opts as NotaryToolKeychainCredentials;
-    if (!keychainCreds.keychain) {
-      throw new Error(
-        'The keychain property is required when using notarization with keychain credentials',
-      );
-    } else if (!keychainCreds.keychainProfile) {
+    if (!keychainCreds.keychainProfile) {
       throw new Error(
         'The keychainProfile property is required when using notarization with keychain credentials',
       );
