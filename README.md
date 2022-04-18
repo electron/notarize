@@ -33,9 +33,11 @@ For notarization, you need the following things:
 1. Xcode 10 or later installed on your Mac.
 2. An [Apple Developer](https://developer.apple.com/) account.
 3. [An app-specific password for your ADC account’s Apple ID](https://support.apple.com/HT204397).
-4. Your app may need to be signed with `hardened-runtime` and the following entitlements:
+4. Your app may need to be signed with `hardened-runtime`, including the following entitlement:
     1. `com.apple.security.cs.allow-jit`
-    2. `com.apple.security.cs.allow-unsigned-executable-memory`
+
+  If you are using Electron 11 or below, you must add the `com.apple.security.cs.allow-unsigned-executable-memory` entitlement too.
+  When using version 12+, this entitlement should not be applied as it increases your app's attack surface.
 
 ## API
 
