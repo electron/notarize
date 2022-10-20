@@ -28,7 +28,7 @@ export const spawn = (
   child.stdout!.on('data', dataHandler);
   child.stderr!.on('data', dataHandler);
   return new Promise<SpawnResult>((resolve, reject) => {
-    child.on('error', (err) => {
+    child.on('error', err => {
       reject(err);
     });
     child.on('exit', code => {
