@@ -3,7 +3,7 @@ Electron Notarize
 
 > Notarize your Electron apps seamlessly for macOS
 
-[![CircleCI status](https://circleci.com/gh/electron/electron-notarize.svg?style=shield)](https://circleci.com/gh/electron/electron-notarize)
+[![CircleCI status](https://circleci.com/gh/electron/notarize.svg?style=shield)](https://circleci.com/gh/electron/notarize)
 [![NPM package](https://img.shields.io/npm/v/electron-notarize)](https://npm.im/electron-notarize)
 
 ## Installation

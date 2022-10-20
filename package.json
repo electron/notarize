@@ -6,13 +6,13 @@
   "typings": "lib/index.d.ts",
   "author": "Samuel Attard",
   "license": "MIT",
-  "homepage": "https://github.com/electron/electron-notarize#readme",
+  "homepage": "https://github.com/electron/notarize#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/electron/electron-notarize.git"
+    "url": "https://github.com/electron/notarize.git"
   },
   "bugs": {
-    "url": "https://github.com/electron/electron-notarize/issues"
+    "url": "https://github.com/electron/notarize/issues"
   },
   "scripts": {
     "build": "tsc",
