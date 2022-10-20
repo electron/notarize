@@ -1,5 +1,5 @@
 {
-  "name": "electron-notarize",
+  "name": "@electron/notarize",
   "version": "0.0.0-development",
   "description": "Notarize your Electron app",
   "main": "lib/index.js",

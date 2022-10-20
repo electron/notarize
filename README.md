@@ -4,16 +4,16 @@ Electron Notarize
 > Notarize your Electron apps seamlessly for macOS
 
 [![CircleCI status](https://circleci.com/gh/electron/notarize.svg?style=shield)](https://circleci.com/gh/electron/notarize)
-[![NPM package](https://img.shields.io/npm/v/electron-notarize)](https://npm.im/electron-notarize)
+[![NPM package](https://img.shields.io/npm/v/@electron/notarize)](https://npm.im/@electron/notarize)
 
 ## Installation
 
 ```bash
 # npm
-npm install electron-notarize --save-dev
+npm install @electron/notarize --save-dev
 
 # yarn
-yarn add electron-notarize --dev
+yarn add @electron/notarize --dev
 ```
 
 ## What is app "notarization"?
@@ -117,7 +117,7 @@ Alternatively, with older versions of Xcode, run:
 ## Example Usage
 
 ```javascript
-import { notarize } from 'electron-notarize';
+import { notarize } from '@electron/notarize';
 
 async function packageTask () {
   // Package your app here, and code sign with hardened runtime
