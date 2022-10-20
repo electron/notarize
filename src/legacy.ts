@@ -31,7 +31,7 @@ export async function startLegacyNotarize(
   opts: LegacyNotarizeStartOptions,
 ): Promise<NotarizeResult> {
   d('starting notarize process for app:', opts.appPath);
-  return await withTempDir<NotarizeResult>(async dir => {
+  return await withTempDir<NotarizeResult>(async (dir) => {
     const zipPath = path.resolve(dir, `${path.basename(opts.appPath, '.app')}.zip`);
     d('zipping application to:', zipPath);
     const zipResult = await spawn(

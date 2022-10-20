@@ -18,7 +18,7 @@ export const spawn = (
     'spawning cmd:',
     cmd,
     'args:',
-    args.map(arg => (isSecret(arg) ? '*********' : arg)),
+    args.map((arg) => (isSecret(arg) ? '*********' : arg)),
     'opts:',
     opts,
   );
@@ -28,10 +28,10 @@ export const spawn = (
   child.stdout!.on('data', dataHandler);
   child.stderr!.on('data', dataHandler);
   return new Promise<SpawnResult>((resolve, reject) => {
-    child.on('error', err => {
+    child.on('error', (err) => {
       reject(err);
     });
-    child.on('exit', code => {
+    child.on('exit', (code) => {
       d(`cmd ${cmd} terminated with code: ${code}`);
       resolve({
         code,
