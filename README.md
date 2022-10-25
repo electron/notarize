@@ -114,6 +114,9 @@ Alternatively, with older versions of Xcode, run:
 ```sh
 /Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD
 ```
+## Debug
+Debug is used to display logs and messages; remember to export DEBUG=electron-notarize:notarytool when necessary.
+
 ## Example Usage
 
 ```javascript
