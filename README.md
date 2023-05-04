@@ -90,6 +90,33 @@ where `AC_USERNAME` should be replaced with your Apple ID, and then in your code
 const password = `@keychain:AC_PASSWORD`;
 ```
 
+## Notes on `altool` not being found
+
+If you get an error that the `altool` command is not found, make sure you:
+
+1. Have installed the latest version of Xcode
+2. Have `altool` in your `$PATH`.
+
+If `altool` is not in your `$PATH`, you can find its location via:
+
+```bash
+xcrun -f altool
+```
+
+This will print, for example:
+
+```
+/Applications/Xcode.app/Contents/Developer/usr/bin/altool
+```
+
+Use this path and edit your `~/.bashrc` (or `~/.zshrc` if you use zsh), adding:
+
+```bash
+export PATH="$PATH:/Applications/Xcode.app/Contents/Developer/usr/bin"
+```
+
+After reloading the shell, the `altool` command should be available.
+
 ## Notes on JWT authentication
 
 You can obtain an API key from [Appstore Connect](https://appstoreconnect.apple.com/access/api). Create a key with _App Manager_ access. Note down the Issuer ID and download the `.p8` file. This file is your API key and comes with the name of `AuthKey_<api_key>.p8`. This is the string you have to supply when calling `notarize`.
