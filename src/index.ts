@@ -24,10 +24,10 @@ export async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
     });
   } else {
     console.warn(
-      'Notarizing using the legacy altool system, the altool system will be disabled on November 1 2023, please switch to the "notarytool" system before then',
+      'Notarizing using the legacy altool system. The altool system will be disabled on November 1 2023. Please switch to the notarytool system before then.',
     );
     console.warn(
-      'You can do this by setting "tool: notarytool" in your "@electron/notarize" options. Please note that the credentials options may be slightly different between tools',
+      'You can do this by setting "tool: notarytool" in your "@electron/notarize" options. Please note that the credentials options may be slightly different between tools.',
     );
     d('notarizing using the legacy notarization system, this will be slow');
     const { uuid } = await startLegacyNotarize({
