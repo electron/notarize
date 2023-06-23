@@ -114,6 +114,11 @@ Alternatively, with older versions of Xcode, run:
 ```sh
 /Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD
 ```
+
+## Notes on your teamId
+
+If you use the new Notary Tool method you will need to set the `teamId` option. To get this ID, go to your [Apple Developer Account](https://developer.apple.com/account), then clikc on "Membership details", and there you will find your Team ID. This link should get you there directly: https://developer.apple.com/account#MembershipDetailsCard
+
 ## Example Usage
 
 ```javascript
