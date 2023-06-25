@@ -44,18 +44,9 @@ For notarization, you need the following things:
 ### Method: `notarize(opts): Promise<void>`
 
 * `options` Object
-  * `tool` String - The notarization tool to use, default is `legacy`.  Can be `legacy` or `notarytool`. `notarytool` is substantially (10x) faster.
+  * `tool` String - The notarization tool to use, default is `notarytool`.  Can be `legacy` or `notarytool`. `notarytool` is substantially (10x) faster and `legacy` is deprecated and will **stop working** on November 1st 2023.
   * `appPath` String - The absolute path to your `.app` file
-  * There are different options for each tool: Legacy
-    * `appBundleId` String - The app bundle identifier your Electron app is using.  E.g. `com.github.electron`
-    * `ascProvider` String (optional) - Your [Team Short Name](#notes-on-your-team-short-name).
-    * There are two authentication methods available: user name with password:
-      * `appleId` String - The username of your apple developer account
-      * `appleIdPassword` String - The [app-specific password](https://support.apple.com/HT204397) (not your Apple ID password).
-    * ... or apiKey with apiIssuer:
-      * `appleApiKey` String - Required for JWT authentication. See Note on JWT authentication below.
-      * `appleApiIssuer` String - Issuer ID. Required if `appleApiKey` is specified.
-  * ... or Notary Tool
+  * There are different options for each tool: Notarytool
     * There are three authentication methods available: user name with password:
       * `appleId` String - The username of your apple developer account
       * `appleIdPassword` String - The [app-specific password](https://support.apple.com/HT204397) (not your Apple ID password).
@@ -67,6 +58,15 @@ For notarization, you need the following things:
     * ... or keychain with keychainProfile:
       * `keychain` String - The name of the keychain or path to the keychain you stored notarization credentials in.
       * `keychainProfile` String - The name of the profile you provided when storing notarization credentials.
+  * ... or Legacy
+    * `appBundleId` String - The app bundle identifier your Electron app is using.  E.g. `com.github.electron`
+    * `ascProvider` String (optional) - Your [Team Short Name](#notes-on-your-team-short-name).
+    * There are two authentication methods available: user name with password:
+      * `appleId` String - The username of your apple developer account
+      * `appleIdPassword` String - The [app-specific password](https://support.apple.com/HT204397) (not your Apple ID password).
+    * ... or apiKey with apiIssuer:
+      * `appleApiKey` String - Required for JWT authentication. See Note on JWT authentication below.
+      * `appleApiIssuer` String - Issuer ID. Required if `appleApiKey` is specified.
 
 ## Safety when using `appleIdPassword`
 

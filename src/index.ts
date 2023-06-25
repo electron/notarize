@@ -3,7 +3,7 @@ import { delay } from './helpers';
 import { startLegacyNotarize, waitForLegacyNotarize } from './legacy';
 import { isNotaryToolAvailable, notarizeAndWaitForNotaryTool } from './notarytool';
 import { stapleApp } from './staple';
-import { NotarizeOptions } from './types';
+import { NotarizeOptions, NotaryToolStartOptions } from './types';
 
 const d = debug('electron-notarize');
 
@@ -12,17 +12,7 @@ export { NotarizeOptions };
 export { validateLegacyAuthorizationArgs as validateAuthorizationArgs } from './validate-args';
 
 export async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
-  if (otherOptions.tool === 'notarytool') {
-    d('notarizing using the new notarytool system');
-    if (!(await isNotaryToolAvailable())) {
-      throw new Error('notarytool is not available, you must be on at least Xcode 13');
-    }
-
-    await notarizeAndWaitForNotaryTool({
-      appPath,
-      ...otherOptions,
-    });
-  } else {
+  if (otherOptions.tool === 'legacy') {
     console.warn(
       'Notarizing using the legacy altool system. The altool system will be disabled on November 1 2023. Please switch to the notarytool system before then.',
     );
@@ -46,6 +36,16 @@ export async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
     await delay(10000);
     d('starting to poll for notarization status');
     await waitForLegacyNotarize({ uuid, ...otherOptions });
+  } else {
+    d('notarizing using the new notarytool system');
+    if (!(await isNotaryToolAvailable())) {
+      throw new Error('notarytool is not available, you must be on at least Xcode 13');
+    }
+
+    await notarizeAndWaitForNotaryTool({
+      appPath,
+      ...otherOptions,
+    } as NotaryToolStartOptions);
   }
 
   await stapleApp({ appPath });
