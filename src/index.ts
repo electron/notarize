@@ -1,4 +1,6 @@
-import * as debug from 'debug';
+import debug from 'debug';
+import retry from 'promise-retry';
+
 import { delay } from './helpers';
 import { startLegacyNotarize, waitForLegacyNotarize } from './legacy';
 import { isNotaryToolAvailable, notarizeAndWaitForNotaryTool } from './notarytool';
@@ -48,5 +50,7 @@ export async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
     } as NotaryToolStartOptions);
   }
 
-  await stapleApp({ appPath });
+  await retry(() => stapleApp({ appPath }), {
+    retries: 3,
+  });
 }

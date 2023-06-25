@@ -1,4 +1,4 @@
-import * as debug from 'debug';
+import debug from 'debug';
 import * as path from 'path';
 
 import { spawn } from './spawn';
