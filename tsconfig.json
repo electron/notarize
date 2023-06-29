@@ -10,10 +10,10 @@
 		"noUnusedLocals": true,
 		"noImplicitThis": true,
 		"noImplicitAny": true,
-		"noImplicitUseStrict": true,
 		"declaration": true,
 		"skipDefaultLibCheck": true,
     "skipLibCheck": true,
+		"esModuleInterop": true
 	},
 	"include": [
 		"src/**/*"
