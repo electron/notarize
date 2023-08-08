@@ -6,6 +6,7 @@ import { startLegacyNotarize, waitForLegacyNotarize } from './legacy';
 import { isNotaryToolAvailable, notarizeAndWaitForNotaryTool } from './notarytool';
 import { stapleApp } from './staple';
 import { NotarizeOptions, NotaryToolStartOptions } from './types';
+import { checkSignatures } from './check-signature';
 
 const d = debug('electron-notarize');
 
@@ -49,6 +50,8 @@ export async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
       ...otherOptions,
     } as NotaryToolStartOptions);
   }
+
+  await checkSignatures({ appPath });
 
   await retry(() => stapleApp({ appPath }), {
     retries: 3,
