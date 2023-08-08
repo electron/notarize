@@ -5,12 +5,10 @@ import type { NotarizeStapleOptions } from './types';
 import debug from 'debug';
 const d = debug('electron-notarize');
 
-const spctl = async (opts: NotarizeStapleOptions) => {
-  d('attempting to spctl asses app:', opts.appPath);
-  const result = await spawn('spctl', ['-vvv', '--assess', path.basename(opts.appPath)], {
+const codesignDisplay = async (opts: NotarizeStapleOptions) => {
+  const result = await spawn('codesign', ['-dv', '-vvvv', '--deep', path.basename(opts.appPath)], {
     cwd: path.dirname(opts.appPath),
   });
-
   return result;
 };
 
@@ -28,21 +26,21 @@ const codesign = async (opts: NotarizeStapleOptions) => {
 };
 export async function checkSignatures(opts: NotarizeStapleOptions): Promise<void> {
   const codesignResult = await codesign(opts);
-  const spctlResult = await spctl(opts);
+  const codesignInfo = await codesignDisplay(opts);
 
   let error = '';
 
-  if (spctlResult.code !== 0) {
-    d('spctl asses failed');
-    error = `Failed to spctl asses your application with code: ${spctlResult.code}\n\n${spctlResult.output}\n`;
+  if (codesignInfo.code !== 0) {
+    d('codesignInfo failed');
+    error = `Failed to display codesign info on your application with code: ${codesignInfo.code}\n\n${codesignInfo.output}\n`;
   }
   if (codesignResult.code !== 0) {
     d('codesign check failed');
-    error += `Failed to codesign your application with code: ${codesignResult.code}\n\n${codesignResult.output}`;
+    error += `Failed to codesign your application with code: ${codesignResult.code}\n\n${codesignResult.output}\n\n${codesignInfo.output}`;
   }
 
   if (error) {
     throw new Error(error);
   }
-  d('codesign and spctl asses succeeded');
+  d('codesign assess succeeded');
 }
