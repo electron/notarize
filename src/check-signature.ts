@@ -38,7 +38,7 @@ export async function checkSignatures(opts: NotarizeStapleOptions): Promise<void
   }
   if (codesignResult.code !== 0) {
     d('codesign check failed');
-    error += `Failed to codesign your application with code: ${spctlResult.code}\n\n${spctlResult.output}`;
+    error += `Failed to codesign your application with code: ${codesignResult.code}\n\n${codesignResult.output}`;
   }
 
   if (error) {
