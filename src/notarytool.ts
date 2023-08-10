@@ -1,5 +1,6 @@
 import debug from 'debug';
 import * as path from 'path';
+import fs from 'fs';
 
 import { spawn } from './spawn';
 import { makeSecret, withTempDir } from './helpers';
@@ -49,26 +50,34 @@ export async function isNotaryToolAvailable() {
 export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions) {
   d('starting notarize process for app:', opts.appPath);
   return await withTempDir(async dir => {
-    const zipPath = path.resolve(dir, `${path.parse(opts.appPath).name}.zip`);
-    d('zipping application to:', zipPath);
-    const zipResult = await spawn(
-      'ditto',
-      ['-c', '-k', '--sequesterRsrc', '--keepParent', path.basename(opts.appPath), zipPath],
-      {
-        cwd: path.dirname(opts.appPath),
-      },
-    );
-    if (zipResult.code !== 0) {
-      throw new Error(
-        `Failed to zip application, exited with code: ${zipResult.code}\n\n${zipResult.output}`,
+    const parsedAppPath = path.parse(opts.appPath);
+    const fsStat = fs.statSync(opts.appPath);
+    let filename: string;
+    if (fsStat.isFile()) {
+      filename = opts.appPath;
+      d(`appPath is file, attempting to upload to Apple`);
+    } else {
+      filename = path.resolve(dir, `${parsedAppPath.name}.zip`);
+      d('zipping application to:', filename);
+      const zipResult = await spawn(
+        'ditto',
+        ['-c', '-k', '--sequesterRsrc', '--keepParent', parsedAppPath.base, filename],
+        {
+          cwd: parsedAppPath.dir,
+        },
       );
+      if (zipResult.code !== 0) {
+        throw new Error(
+          `Failed to zip application, exited with code: ${zipResult.code}\n\n${zipResult.output}`,
+        );
+      }
+      d('zip succeeded, attempting to upload to Apple');
     }
-    d('zip succeeded, attempting to upload to Apple');
 
     const notarizeArgs = [
       'notarytool',
       'submit',
-      zipPath,
+      filename,
       ...authorizationArgs(opts),
       '--wait',
       '--output-format',
