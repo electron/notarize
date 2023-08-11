@@ -1,7 +1,7 @@
 import debug from 'debug';
-import * as fs from 'fs-extra';
-import * as os from 'os';
-import * as path from 'path';
+import fs from 'fs/promises';
+import os from 'os';
+import path from 'path';
 
 const d = debug('electron-notarize:helpers');
 
@@ -13,11 +13,11 @@ export async function withTempDir<T>(fn: (dir: string) => Promise<T>) {
     result = await fn(dir);
   } catch (err) {
     d('work failed');
-    await fs.remove(dir);
+    await fs.rm(dir, { recursive: true, force: true });
     throw err;
   }
   d('work succeeded');
-  await fs.remove(dir);
+  await fs.rm(dir, { recursive: true, force: true });
   return result;
 }
 

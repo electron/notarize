@@ -1,5 +1,5 @@
 import debug from 'debug';
-import * as path from 'path';
+import path from 'path';
 
 import { spawn } from './spawn';
 import { withTempDir, makeSecret, parseNotarizationInfo, delay } from './helpers';
