@@ -33,7 +33,7 @@ class Secret {
 }
 
 export function makeSecret(s: string) {
-  return (new Secret(s) as any) as string;
+  return new Secret(s) as any as string;
 }
 
 export function isSecret(s: string) {
@@ -63,10 +63,10 @@ export function parseNotarizationInfo(info: string): NotarizationInfo {
     }
   };
   matchToProperty('uuid', /\n *RequestUUID: (.+?)\n/);
-  matchToProperty('date', /\n *Date: (.+?)\n/, d => new Date(d));
+  matchToProperty('date', /\n *Date: (.+?)\n/, (d) => new Date(d));
   matchToProperty('status', /\n *Status: (.+?)\n/);
   matchToProperty('logFileUrl', /\n *LogFileURL: (.+?)\n/);
-  matchToProperty('statusCode', /\n *Status Code: (.+?)\n/, n => parseInt(n, 10) as any);
+  matchToProperty('statusCode', /\n *Status Code: (.+?)\n/, (n) => parseInt(n, 10) as any);
   matchToProperty('statusMessage', /\n *Status Message: (.+?)\n/);
 
   if (out.logFileUrl === '(null)') {
@@ -77,5 +77,5 @@ export function parseNotarizationInfo(info: string): NotarizationInfo {
 }
 
 export function delay(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
