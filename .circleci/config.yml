@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   cfa: continuousauth/npm@1.0.2
-  node: electronjs/node@1.1.0
+  node: electronjs/node@1.2.0
 
 workflows:
   test_and_release:
@@ -11,6 +11,7 @@ workflows:
       - node/test:
           executor: node/macos
           name: test-mac-<< matrix.node-version >>
+          override-ci-command: yarn install --frozen-lockfile --ignore-engines
           test-steps:
             - run: yarn lint
             - run: yarn test
