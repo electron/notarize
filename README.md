@@ -52,9 +52,9 @@ For notarization, you need the following things:
       * `appleIdPassword` String - The [app-specific password](https://support.apple.com/HT204397) (not your Apple ID password).
       * `teamId` String - The team ID you want to notarize under.
     * ... or apiKey with apiIssuer:
-      * `appleApiKey` String - Required for JWT authentication. See Note on JWT authentication below.
-      * `appleApiKeyId` String - Required for JWT authentication. See Note on JWT authentication below.
-      * `appleApiIssuer` String - Issuer ID. Required if `appleApiKey` is specified.
+      * `appleApiKey` String - Absolute path to the `.p8` file containing the key. Required for JWT authentication. See Note on JWT authentication below.
+      * `appleApiKeyId` String - App Store Connect API key ID, for example, `T9GPZ92M7K`. Required for JWT authentication. See Note on JWT authentication below.
+      * `appleApiIssuer` String - Your App Store Connect API key issuer, for example, `c055ca8c-e5a8-4836-b61d-aa5794eeb3f4`. Required if `appleApiKey` is specified.
     * ... or keychain with keychainProfile:
       * `keychain` String - The name of the keychain or path to the keychain you stored notarization credentials in.
       * `keychainProfile` String - The name of the profile you provided when storing notarization credentials.
@@ -92,14 +92,16 @@ const password = `@keychain:AC_PASSWORD`;
 
 ## Notes on JWT authentication
 
-You can obtain an API key from [Appstore Connect](https://appstoreconnect.apple.com/access/api). Create a key with _App Manager_ access. Note down the Issuer ID and download the `.p8` file. This file is your API key and comes with the name of `AuthKey_<api_key>.p8`. This is the string you have to supply when calling `notarize`.
+You can obtain an API key from [Appstore Connect](https://appstoreconnect.apple.com/access/api). Create a key with _App Manager_ access. Note down the Issuer ID and download the `.p8` file. This file is your API key and comes with the name of `AuthKey_<appleApiKeyId>.p8`. This is the string you have to supply when calling `notarize`.
 
-Based on the `ApiKey`, `altool` will look in the following places for that file:
+Based on the `ApiKey`, the legacy `altool` will look in the following places for that file:
 
 * `./private_keys`
 * `~/private_keys`
 * `~/.private_keys`
 * `~/.appstoreconnect/private_keys`
+
+`notarytool` will not look for the key, and you must instead provide its path as the `appleApiKey` argument.
 
 ## Notes on your Team Short Name
 
