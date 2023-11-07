@@ -121,7 +121,7 @@ If you use the new Notary Tool method you will need to set the `teamId` option. 
 
 ## Debug
 
-Debug is used to display logs and messages, you can use `export DEBUG=electron-notarize:notarytool` when necessary.
+[`debug`](https://www.npmjs.com/package/debug) is used to display logs and messages. You can use `export DEBUG=electron-notarize*` to log additional debug information from this module.
 
 ## Example Usage
 
