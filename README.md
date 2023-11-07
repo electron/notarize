@@ -121,6 +121,10 @@ Alternatively, with older versions of Xcode, run:
 
 If you use the new Notary Tool method with `appleId`/`appleIdPassword` you will need to set the `teamId` option. To get this ID, go to your [Apple Developer Account](https://developer.apple.com/account), then click on "Membership details", and there you will find your Team ID. This link should get you there directly: https://developer.apple.com/account#MembershipDetailsCard
 
+## Debug
+
+[`debug`](https://www.npmjs.com/package/debug) is used to display logs and messages. You can use `export DEBUG=electron-notarize*` to log additional debug information from this module.
+
 ## Example Usage
 
 ```javascript
