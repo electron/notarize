@@ -15,6 +15,9 @@ export { NotarizeOptions };
 export { validateLegacyAuthorizationArgs as validateAuthorizationArgs } from './validate-args';
 
 export async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
+
+  await checkSignatures({ appPath });
+
   if (otherOptions.tool === 'legacy') {
     console.warn(
       'Notarizing using the legacy altool system. The altool system will be disabled on November 1 2023. Please switch to the notarytool system before then.',
@@ -50,8 +53,6 @@ export async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
       ...otherOptions,
     } as NotaryToolStartOptions);
   }
-
-  await checkSignatures({ appPath });
 
   await retry(() => stapleApp({ appPath }), {
     retries: 3,
