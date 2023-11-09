@@ -1,7 +1,7 @@
 import * as path from 'path';
 
 import { spawn } from './spawn';
-import type { NotarizeStapleOptions } from './types';
+import { NotarizeStapleOptions } from './types';
 import debug from 'debug';
 const d = debug('electron-notarize');
 
