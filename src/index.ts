@@ -15,7 +15,6 @@ export { NotarizeOptions };
 export { validateLegacyAuthorizationArgs as validateAuthorizationArgs } from './validate-args';
 
 export async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
-
   await checkSignatures({ appPath });
 
   if (otherOptions.tool === 'legacy') {
