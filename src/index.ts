@@ -1,12 +1,12 @@
 import debug from 'debug';
 import retry from 'promise-retry';
 
+import { checkSignatures } from './check-signature';
 import { delay } from './helpers';
 import { startLegacyNotarize, waitForLegacyNotarize } from './legacy';
 import { isNotaryToolAvailable, notarizeAndWaitForNotaryTool } from './notarytool';
 import { stapleApp } from './staple';
 import { NotarizeOptions, NotaryToolStartOptions } from './types';
-import { checkSignatures } from './check-signature';
 
 const d = debug('electron-notarize');
 

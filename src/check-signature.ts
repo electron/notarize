@@ -25,9 +25,7 @@ const codesign = async (opts: NotarizeStapleOptions) => {
   return result;
 };
 export async function checkSignatures(opts: NotarizeStapleOptions): Promise<void> {
-  const codesignResult = await codesign(opts);
-  const codesignInfo = await codesignDisplay(opts);
-
+  const [codesignResult, codesignInfo] = await Promise.all([codesign(opts), codesignDisplay(opts)]);
   let error = '';
 
   if (codesignInfo.code !== 0) {
