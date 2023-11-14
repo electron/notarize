@@ -1,6 +1,7 @@
 import debug from 'debug';
 import retry from 'promise-retry';
 
+import { checkSignatures } from './check-signature';
 import { delay } from './helpers';
 import { startLegacyNotarize, waitForLegacyNotarize } from './legacy';
 import { isNotaryToolAvailable, notarizeAndWaitForNotaryTool } from './notarytool';
@@ -14,6 +15,8 @@ export { NotarizeOptions };
 export { validateLegacyAuthorizationArgs as validateAuthorizationArgs } from './validate-args';
 
 export async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
+  await checkSignatures({ appPath });
+
   if (otherOptions.tool === 'legacy') {
     console.warn(
       'Notarizing using the legacy altool system. The altool system will be disabled on November 1 2023. Please switch to the notarytool system before then.',
