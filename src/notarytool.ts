@@ -53,10 +53,10 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
     let filePath;
     if (fileExt === '.dmg' || fileExt === '.pkg') {
       filePath = path.resolve(dir, opts.appPath);
-      d('attempting to upload to Apple');
+      d('attempting to upload file to Apple: ', filePath);
     } else {
       filePath = path.resolve(dir, `${path.parse(opts.appPath).name}.zip`);
-      d('zipping application to:', zipPath);
+      d('zipping application to:', filePath);
       const zipResult = await spawn(
         'ditto',
         ['-c', '-k', '--sequesterRsrc', '--keepParent', path.basename(opts.appPath), filePath],
