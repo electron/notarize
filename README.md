@@ -56,7 +56,7 @@ For notarization, you need the following things:
       * `appleApiKeyId` String - App Store Connect API key ID, for example, `T9GPZ92M7K`. Required for JWT authentication. See Note on JWT authentication below.
       * `appleApiIssuer` String - Your App Store Connect API key issuer, for example, `c055ca8c-e5a8-4836-b61d-aa5794eeb3f4`. Required if `appleApiKey` is specified.
     * ... or keychain with keychainProfile:
-      * `keychain` String - The name of the keychain or path to the keychain you stored notarization credentials in.
+      * `keychain` String (optional) - The name of the keychain or path to the keychain you stored notarization credentials in. If omitted, iCloud keychain is used by default.
       * `keychainProfile` String - The name of the profile you provided when storing notarization credentials.
   * ... or Legacy
     * `appBundleId` String - The app bundle identifier your Electron app is using.  E.g. `com.github.electron`
