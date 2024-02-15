@@ -25,6 +25,11 @@ const codesign = async (opts: NotarizeStapleOptions) => {
   return result;
 };
 export async function checkSignatures(opts: NotarizeStapleOptions): Promise<void> {
+  const fileExt = path.extname(opts.appPath);
+  if (fileExt === '.dmg' || fileExt === '.pkg') {
+    d('skipping codesign check for dmg or pkg file');
+    return;
+  }
   const [codesignResult, codesignInfo] = await Promise.all([codesign(opts), codesignDisplay(opts)]);
   let error = '';
 
