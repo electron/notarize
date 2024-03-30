@@ -65,7 +65,6 @@ export type LegacyNotarizeWaitOptions = NotarizeResult & LegacyNotarizeCredentia
 export type NotarizeStapleOptions = Pick<LegacyNotarizeAppOptions, 'appPath'>;
 
 /** @deprecated */
-export type LegacyNotarizeOptions =  ({ tool?: 'legacy'} & LegacyNotarizeStartOptions)
-export type NotarizeOptions =
-  | /** @deprecate*/ ({ tool?: 'legacy' /** @deprecated */ } & LegacyNotarizeStartOptions)
-  | ({ tool?: 'notarytool' } & NotaryToolStartOptions);
+export type NotarizeOptionsLegacy = { tool: 'legacy' } & LegacyNotarizeStartOptions;
+export type NotarizeOptionsNotaryTool = { tool?: 'notarytool' } & NotaryToolStartOptions;
+export type NotarizeOptions = NotarizeOptionsLegacy | NotarizeOptionsNotaryTool;
