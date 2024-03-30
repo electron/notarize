@@ -1,3 +1,4 @@
+/** @deprecated */
 export interface LegacyNotarizePasswordCredentials {
   appleId: string;
   appleIdPassword: string;
@@ -9,6 +10,7 @@ export interface NotaryToolPasswordCredentials {
   teamId: string;
 }
 
+/** @deprecated */
 export interface LegacyNotarizeApiKeyCredentials {
   appleApiKey: string;
   appleApiIssuer: string;
@@ -25,6 +27,7 @@ export interface NotaryToolKeychainCredentials {
   keychain?: string;
 }
 
+/** @deprecated */
 export type LegacyNotarizeCredentials =
   | LegacyNotarizePasswordCredentials
   | LegacyNotarizeApiKeyCredentials;
@@ -34,6 +37,7 @@ export type NotaryToolCredentials =
   | NotaryToolKeychainCredentials;
 export type NotarizeCredentials = LegacyNotarizeCredentials | NotaryToolCredentials;
 
+/** @deprecated */
 export interface LegacyNotarizeAppOptions {
   appPath: string;
   appBundleId: string;
@@ -51,12 +55,17 @@ export interface NotarizeResult {
   uuid: string;
 }
 
+/** @deprecated */
 export type LegacyNotarizeStartOptions = LegacyNotarizeAppOptions &
   LegacyNotarizeCredentials &
   TransporterOptions;
 export type NotaryToolStartOptions = NotaryToolNotarizeAppOptions & NotaryToolCredentials;
+/** @deprecated */
 export type LegacyNotarizeWaitOptions = NotarizeResult & LegacyNotarizeCredentials;
 export type NotarizeStapleOptions = Pick<LegacyNotarizeAppOptions, 'appPath'>;
+
+/** @deprecated */
+export type LegacyNotarizeOptions =  ({ tool?: 'legacy'} & LegacyNotarizeStartOptions)
 export type NotarizeOptions =
-  | ({ tool?: 'legacy' } & LegacyNotarizeStartOptions)
-  | ({ tool: 'notarytool' } & NotaryToolStartOptions);
+  | /** @deprecate*/ ({ tool?: 'legacy' /** @deprecated */ } & LegacyNotarizeStartOptions)
+  | ({ tool?: 'notarytool' } & NotaryToolStartOptions);
