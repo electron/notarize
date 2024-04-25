@@ -30,7 +30,7 @@ async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
 
   await checkSignatures({ appPath });
 
-  d('notarizing using the new notarytool system');
+  d('notarizing using notarytool');
   if (!(await isNotaryToolAvailable())) {
     throw new Error('notarytool is not available, you must be on at least Xcode 13');
   }

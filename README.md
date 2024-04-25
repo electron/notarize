@@ -46,9 +46,9 @@ For notarization, you need the following things:
 * `options` Object
   * `tool` String - The notarization tool to use, default is `notarytool`.  Previously, the value `legacy` used `altool`, which [**stopped working** on November 1st 2023](https://developer.apple.com/news/?id=y5mjxqmn).
   * `appPath` String - The absolute path to your `.app` file
-  * There are different options for each tool: Notarytool
-    * There are three authentication methods available: user name with password:
-      * `appleId` String - The username of your apple developer account
+  * There are three authentication methods available:
+    * user name with password:
+      * `appleId` String - The username of your Apple Developer account
       * `appleIdPassword` String - The [app-specific password](https://support.apple.com/HT204397) (not your Apple ID password).
       * `teamId` String - The [team ID](https://developer.apple.com/help/account/manage-your-team/locate-your-team-id/) you want to notarize under.
     * ... or apiKey with apiIssuer:
@@ -83,13 +83,11 @@ const password = `@keychain:AC_PASSWORD`;
 
 ## Notes on JWT authentication
 
-You can obtain an API key from [Appstore Connect](https://appstoreconnect.apple.com/access/api). Create a key with _App Manager_ access. Note down the Issuer ID and download the `.p8` file. This file is your API key and comes with the name of `AuthKey_<appleApiKeyId>.p8`. This is the string you have to supply when calling `notarize`.
-
-`notarytool` will not look for the key, and you must instead provide its path as the `appleApiKey` argument.
+You can obtain an API key from [App Store Connect](https://appstoreconnect.apple.com/access/api). Create a _Team Key_ (not an _Individual Key_) with _App Manager_ access. Note down the Issuer ID and download the `.p8` file. This file is your API key and comes with the name of `AuthKey_<appleApiKeyId>.p8`. Provide the path to this file as the `appleApiKey` argument.
 
 ## Notes on your teamId
 
-If you use the new Notary Tool method with `appleId`/`appleIdPassword` you will need to set the `teamId` option. To get this ID, go to your [Apple Developer Account](https://developer.apple.com/account), then click on "Membership details", and there you will find your Team ID. This link should get you there directly: https://developer.apple.com/account#MembershipDetailsCard
+To get your `teamId` value, go to your [Apple Developer Account](https://developer.apple.com/account), then click on "Membership details", and there you will find your Team ID.
 
 ## Debug
 
