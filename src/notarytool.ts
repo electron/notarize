@@ -9,7 +9,6 @@ import {
   isNotaryToolApiKeyCredentials,
 } from './validate-args';
 import { NotaryToolCredentials, NotaryToolStartOptions } from './types';
-import { parse } from 'path';
 
 const d = debug('electron-notarize:notarytool');
 
