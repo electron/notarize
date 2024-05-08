@@ -9,6 +9,7 @@ import {
   isNotaryToolApiKeyCredentials,
 } from './validate-args';
 import { NotaryToolCredentials, NotaryToolStartOptions } from './types';
+import { parse } from 'path';
 
 const d = debug('electron-notarize:notarytool');
 
@@ -83,16 +84,25 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
     ];
 
     const result = await spawn('xcrun', notarizeArgs);
-    let parsed: any;
-    try {
-        parsed = JSON.parse(result.output.trim());
-    } catch (err) {
-        throw new Error(`Failed to notarize via notarytool\n\nCould not parse output as JSON\n\n${result.output.trim()}`);
-    }
 
-    if (!parsed.status || parsed.status !== 'Accepted') {
+    if (result.code !== 0) {
+      let parsed: any;
       try {
-        if (parsed && parsed.id) {
+        parsed = JSON.parse(result.output.trim());
+      } catch (err) {
+        throw new Error(
+          `Failed to notarize via notarytool.  Failed with unexpected result: \n\n${result.output.trim()}`,
+        );
+      }
+
+      let logId: undefined | string;
+      if (!parsed.status || parsed.status !== 'Accepted') {
+        logId = parsed.id;
+      }
+
+      let logOutput: undefined | string;
+      if (logId) {
+        try {
           const logResult = await spawn('xcrun', [
             'notarytool',
             'log',
@@ -100,12 +110,19 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
             ...authorizationArgs(opts),
           ]);
           d('notarization log', logResult.output);
+          logOutput = logResult.output;
+        } catch (e) {
+          d('failed to pull notarization logs', e);
         }
-      } catch (e) {
-        d('failed to pull notarization logs', e);
       }
-      throw new Error(`Failed to notarize via notarytool\n\n${result.output}`);
+
+      let message = `Failed to notarize via notarytool\n\n${result.output}`;
+      if (logOutput) {
+        message += `\n\nDiagnostics from notarytool log: ${logOutput}`;
+      }
+      throw new Error(message);
     }
+
     d('notarization success');
   });
 }
