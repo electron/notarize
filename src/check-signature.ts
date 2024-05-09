@@ -6,22 +6,13 @@ import debug from 'debug';
 const d = debug('electron-notarize');
 
 const codesignDisplay = async (opts: NotarizeStapleOptions) => {
-  const result = await spawn('codesign', ['-dv', '-vvvv', '--deep', path.basename(opts.appPath)], {
-    cwd: path.dirname(opts.appPath),
-  });
+  const result = await spawn('codesign', ['-dv', '-vvvv', '--deep', opts.appPath]);
   return result;
 };
 
 const codesign = async (opts: NotarizeStapleOptions) => {
   d('attempting to check codesign of app:', opts.appPath);
-  const result = await spawn(
-    'codesign',
-    ['-vvv', '--deep', '--strict', path.basename(opts.appPath)],
-    {
-      cwd: path.dirname(opts.appPath),
-    },
-  );
-
+  const result = await spawn('codesign', ['-vvv', '--deep', '--strict', opts.appPath]);
   return result;
 };
 export async function checkSignatures(opts: NotarizeStapleOptions): Promise<void> {
