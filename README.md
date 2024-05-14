@@ -30,7 +30,7 @@ Apple has made this a hard requirement as of 10.15 (Catalina).
 
 For notarization, you need the following things:
 
-1. Xcode 10 or later installed on your Mac.
+1. Xcode 13 or later installed on your Mac.
 2. An [Apple Developer](https://developer.apple.com/) account.
 3. [An app-specific password for your ADC account’s Apple ID](https://support.apple.com/HT204397).
 4. Your app may need to be signed with `hardened-runtime`, including the following entitlement:
@@ -44,13 +44,13 @@ For notarization, you need the following things:
 ### Method: `notarize(opts): Promise<void>`
 
 * `options` Object
-  * `tool` String - The notarization tool to use, default is `notarytool`.  Can be `legacy` or `notarytool`. `notarytool` is substantially (10x) faster and `legacy` is deprecated and will **stop working** on November 1st 2023.
+  * `tool` String - The notarization tool to use, default is `notarytool`.  Previously, the value `legacy` used `altool`, which [**stopped working** on November 1st 2023](https://developer.apple.com/news/?id=y5mjxqmn).
   * `appPath` String - The absolute path to your `.app` file
-  * There are different options for each tool: Notarytool
-    * There are three authentication methods available: user name with password:
-      * `appleId` String - The username of your apple developer account
+  * There are three authentication methods available:
+    * user name with password:
+      * `appleId` String - The username of your Apple Developer account
       * `appleIdPassword` String - The [app-specific password](https://support.apple.com/HT204397) (not your Apple ID password).
-      * `teamId` String - The team ID you want to notarize under.
+      * `teamId` String - The [team ID](https://developer.apple.com/help/account/manage-your-team/locate-your-team-id/) you want to notarize under.
     * ... or apiKey with apiIssuer:
       * `appleApiKey` String - Absolute path to the `.p8` file containing the key. Required for JWT authentication. See Note on JWT authentication below.
       * `appleApiKeyId` String - App Store Connect API key ID, for example, `T9GPZ92M7K`. Required for JWT authentication. See Note on JWT authentication below.
@@ -58,15 +58,6 @@ For notarization, you need the following things:
     * ... or keychain with keychainProfile:
       * `keychain` String (optional) - The name of the keychain or path to the keychain you stored notarization credentials in. If omitted, iCloud keychain is used by default.
       * `keychainProfile` String - The name of the profile you provided when storing notarization credentials.
-  * ... or Legacy
-    * `appBundleId` String - The app bundle identifier your Electron app is using.  E.g. `com.github.electron`
-    * `ascProvider` String (optional) - Your [Team Short Name](#notes-on-your-team-short-name).
-    * There are two authentication methods available: user name with password:
-      * `appleId` String - The username of your apple developer account
-      * `appleIdPassword` String - The [app-specific password](https://support.apple.com/HT204397) (not your Apple ID password).
-    * ... or apiKey with apiIssuer:
-      * `appleApiKey` String - Required for JWT authentication. See Note on JWT authentication below.
-      * `appleApiIssuer` String - Issuer ID. Required if `appleApiKey` is specified.
 
 ## Safety when using `appleIdPassword`
 
@@ -92,34 +83,11 @@ const password = `@keychain:AC_PASSWORD`;
 
 ## Notes on JWT authentication
 
-You can obtain an API key from [Appstore Connect](https://appstoreconnect.apple.com/access/api). Create a key with _App Manager_ access. Note down the Issuer ID and download the `.p8` file. This file is your API key and comes with the name of `AuthKey_<appleApiKeyId>.p8`. This is the string you have to supply when calling `notarize`.
-
-Based on the `ApiKey`, the legacy `altool` will look in the following places for that file:
-
-* `./private_keys`
-* `~/private_keys`
-* `~/.private_keys`
-* `~/.appstoreconnect/private_keys`
-
-`notarytool` will not look for the key, and you must instead provide its path as the `appleApiKey` argument.
-
-## Notes on your Team Short Name
-
-If you are a member of multiple teams or organizations, you have to tell Apple on behalf of which organization you're uploading. To find your [team's short name](https://forums.developer.apple.com/thread/113798)), you can ask `iTMSTransporter`, which is part of the now deprecated `Application Loader` as well as the newer [`Transporter`](https://apps.apple.com/us/app/transporter/id1450874784?mt=12).
-
-With `Transporter` installed, run:
-```sh
-/Applications/Transporter.app/Contents/itms/bin/iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD
-```
-
-Alternatively, with older versions of Xcode, run:
-```sh
-/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m provider -u APPLE_DEV_ACCOUNT -p APP_PASSWORD
-```
+You can obtain an API key from [App Store Connect](https://appstoreconnect.apple.com/access/api). Create a _Team Key_ (not an _Individual Key_) with _App Manager_ access. Note down the Issuer ID and download the `.p8` file. This file is your API key and comes with the name of `AuthKey_<appleApiKeyId>.p8`. Provide the path to this file as the `appleApiKey` argument.
 
 ## Notes on your teamId
 
-If you use the new Notary Tool method with `appleId`/`appleIdPassword` you will need to set the `teamId` option. To get this ID, go to your [Apple Developer Account](https://developer.apple.com/account), then click on "Membership details", and there you will find your Team ID. This link should get you there directly: https://developer.apple.com/account#MembershipDetailsCard
+To get your `teamId` value, go to your [Apple Developer Account](https://developer.apple.com/account), then click on "Membership details", and there you will find your Team ID.
 
 ## Debug
 
@@ -133,11 +101,10 @@ import { notarize } from '@electron/notarize';
 async function packageTask () {
   // Package your app here, and code sign with hardened runtime
   await notarize({
-    appBundleId,
     appPath,
     appleId,
     appleIdPassword,
-    ascProvider, // This parameter is optional
+    teamId,
   });
 }
 ```
