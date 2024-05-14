@@ -45,7 +45,7 @@ For notarization, you need the following things:
 
 * `options` Object
   * `tool` String - The notarization tool to use, default is `notarytool`.  Can be `legacy` or `notarytool`. `notarytool` is substantially (10x) faster and `legacy` is deprecated and will **stop working** on November 1st 2023.
-  * `appPath` String - The absolute path to your `.app` file
+  * `appPath` String - The absolute path to your `.app`, `.dmg` or `.pkg` file
   * There are different options for each tool: Notarytool
     * There are three authentication methods available: user name with password:
       * `appleId` String - The username of your apple developer account

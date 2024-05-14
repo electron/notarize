@@ -49,19 +49,18 @@ export async function isNotaryToolAvailable() {
 export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions) {
   d('starting notarize process for app:', opts.appPath);
   return await withTempDir(async dir => {
-    const fileExt = path.extname(opts.appPath);
-    let filePath;
-    if (fileExt === '.dmg' || fileExt === '.pkg') {
-      filePath = path.resolve(dir, opts.appPath);
-      d('attempting to upload file to Apple: ', filePath);
+    const parsedAppPath = path.parse(opts.appPath);
+    let filename = opts.appPath;
+    if (['.dmg', '.pkg'].includes(parsedAppPath.ext)) {
+      d('attempting to upload file to Apple: ', filename);
     } else {
-      filePath = path.resolve(dir, `${path.parse(opts.appPath).name}.zip`);
-      d('zipping application to:', filePath);
+      filename = path.resolve(dir, `${parsedAppPath.name}.zip`);
+      d('zipping application to:', filename);
       const zipResult = await spawn(
         'ditto',
-        ['-c', '-k', '--sequesterRsrc', '--keepParent', path.basename(opts.appPath), filePath],
+        ['-c', '-k', '--sequesterRsrc', '--keepParent', parsedAppPath.base, filename],
         {
-          cwd: path.dirname(opts.appPath),
+          cwd: parsedAppPath.dir,
         },
       );
       if (zipResult.code !== 0) {
@@ -75,7 +74,7 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
     const notarizeArgs = [
       'notarytool',
       'submit',
-      filePath,
+      filename,
       ...authorizationArgs(opts),
       '--wait',
       '--output-format',
