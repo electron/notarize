@@ -83,24 +83,42 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
     ];
 
     const result = await spawn('xcrun', notarizeArgs);
-    const parsed = JSON.parse(result.output.trim());
+    const rawOut = result.output.trim();
 
-    if (result.code !== 0 || !parsed.status || parsed.status !== 'Accepted') {
+    let parsed: any;
+    try {
+      parsed = JSON.parse(rawOut);
+    } catch (err) {
+      throw new Error(
+        `Failed to notarize via notarytool.  Failed with unexpected result: \n\n${rawOut}`,
+      );
+    }
+
+    if (result.code === 0 && parsed.status === 'Accepted') {
+      d('notarization success');
+      return;
+    }
+
+    let logOutput: undefined | string;
+    if (parsed.id) {
       try {
-        if (parsed && parsed.id) {
-          const logResult = await spawn('xcrun', [
-            'notarytool',
-            'log',
-            parsed.id,
-            ...authorizationArgs(opts),
-          ]);
-          d('notarization log', logResult.output);
-        }
+        const logResult = await spawn('xcrun', [
+          'notarytool',
+          'log',
+          parsed.id,
+          ...authorizationArgs(opts),
+        ]);
+        d('notarization log', logResult.output);
+        logOutput = logResult.output;
       } catch (e) {
         d('failed to pull notarization logs', e);
       }
-      throw new Error(`Failed to notarize via notarytool\n\n${result.output}`);
     }
-    d('notarization success');
+
+    let message = `Failed to notarize via notarytool\n\n${result.output}`;
+    if (logOutput) {
+      message += `\n\nDiagnostics from notarytool log: ${logOutput}`;
+    }
+    throw new Error(message);
   });
 }
