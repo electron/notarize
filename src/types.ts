@@ -100,7 +100,7 @@ export type LegacyNotarizeCredentials =
 
 /**
  * Credential options for authenticating `notarytool`. There are three valid stategies available:
- * 
+ *
  * - {@link NotaryToolPasswordCredentials} — Using an Apple ID and app-specific password
  * - {@link NotaryToolApiKeyCredentials} — Using an App Store Connect API key
  * - {@link NotaryToolKeychainCredentials} — Using one of the two above credential sets stored within the macOS Keychain
