@@ -47,6 +47,10 @@ export interface NotaryToolNotarizeAppOptions {
   appPath: string;
 }
 
+export interface NotaryToolOptions {
+  notarytoolPath?: string;
+}
+
 export interface TransporterOptions {
   ascProvider?: string;
 }
@@ -59,7 +63,9 @@ export interface NotarizeResult {
 export type LegacyNotarizeStartOptions = LegacyNotarizeAppOptions &
   LegacyNotarizeCredentials &
   TransporterOptions;
-export type NotaryToolStartOptions = NotaryToolNotarizeAppOptions & NotaryToolCredentials;
+export type NotaryToolStartOptions = NotaryToolNotarizeAppOptions &
+  NotaryToolOptions &
+  NotaryToolCredentials;
 /** @deprecated */
 export type LegacyNotarizeWaitOptions = NotarizeResult & LegacyNotarizeCredentials;
 export type NotarizeStapleOptions = Pick<LegacyNotarizeAppOptions, 'appPath'>;
