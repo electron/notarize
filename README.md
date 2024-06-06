@@ -147,25 +147,36 @@ await notarize({
   keychainProfile,
 });
 ```
+## Troubleshooting
 
-## Validating credentials
+### Debug logging
 
-When notarizing your application
+[`debug`](https://www.npmjs.com/package/debug) is used to display logs and messages.
+Run your notarization scripts with the `DEBUG=electron-notarize*` environment variable to log additional
+debug information from this module.
+
+### Validating credentials
+
+When notarizing your application, you may run into issues with validating your notarization
+credentials.
 
 ```
 Error: HTTP status code: 401. Invalid credentials. Username or password is incorrect.
 Use the app-specific password generated at appleid.apple.com. Ensure that all authentication arguments are correct.
 ```
 
-## Validating app notarization
+[Storing your credentials in Keychain](#usage-with-keychain-credentials) will validate your credentials before
+even GitHub.
+
+### Validating app notarization
 
 To validate that notarization worked, you can use the `stapler` command-line utility:
 
 ```sh
 stapler validate path/to/notarized.app
 ```
-## Debug
 
-[`debug`](https://www.npmjs.com/package/debug) is used to display logs and messages.
-Run your notarization scripts with the `DEBUG=electron-notarize*` environment variable to log additional
-debug information from this module.
+### Apple documentation
+
+Apple also provides additional debugging documentation on
+[Resolving common notarization issues](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues).
