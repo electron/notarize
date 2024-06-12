@@ -41,7 +41,8 @@ For notarization, you need the following things:
 
 ### Notarization on older macOS versions
 
-Xcode 13 is available from macOS 11.3, but notarization can be performed on systems down to macOS 10.5 ([source](https://developer.apple.com/documentation/technotes/tn3147-migrating-to-the-latest-notarization-tool#Enable-notarization-on-an-older-version-of-macOS)).
+Xcode 13 is available from macOS 11.3, but notarization can be performed on systems down to macOS 10.15
+(see [TN3147](https://developer.apple.com/documentation/technotes/tn3147-migrating-to-the-latest-notarization-tool#Enable-notarization-on-an-older-version-of-macOS) for more information).
 
 To achieve this, you can copy notarytool binary from a newer macOS version and provide its path as `notarytoolPath` option.
 
