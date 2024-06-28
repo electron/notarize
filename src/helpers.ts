@@ -1,23 +1,23 @@
 import debug from 'debug';
-import * as fs from 'fs-extra';
+import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
 const d = debug('electron-notarize:helpers');
 
 export async function withTempDir<T>(fn: (dir: string) => Promise<T>) {
-  const dir = await fs.mkdtemp(path.resolve(os.tmpdir(), 'electron-notarize-'));
+  const dir = await fs.promises.mkdtemp(path.resolve(os.tmpdir(), 'electron-notarize-'));
   d('doing work inside temp dir:', dir);
   let result: T;
   try {
     result = await fn(dir);
   } catch (err) {
     d('work failed');
-    await fs.remove(dir);
+    await fs.promises.rm(dir, { force: true, recursive: true });
     throw err;
   }
   d('work succeeded');
-  await fs.remove(dir);
+  await fs.promises.rm(dir, { force: true, recursive: true });
   return result;
 }
 
