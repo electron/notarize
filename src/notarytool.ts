@@ -59,10 +59,7 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
       d('zipping application to:', filePath);
       const zipResult = await spawn(
         'ditto',
-        ['-c', '-k', '--sequesterRsrc', '--keepParent', path.basename(opts.appPath), filePath],
-        {
-          cwd: path.dirname(opts.appPath),
-        },
+        ['-c', '-k', '--sequesterRsrc', '--keepParent', opts.appPath, filePath],
       );
       if (zipResult.code !== 0) {
         throw new Error(
