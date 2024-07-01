@@ -45,6 +45,7 @@ export interface LegacyNotarizeAppOptions {
 
 export interface NotaryToolNotarizeAppOptions {
   appPath: string;
+  notarytoolPath?: string;
 }
 
 export interface TransporterOptions {
