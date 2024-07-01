@@ -1,0 +1,17 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src/index.ts"],
+  "plugin": ["typedoc-plugin-missing-exports"],
+  "placeInternalsInOwningModule": true,
+  "excludeInternal": true,
+  "navigation": {
+    "includeCategories": true
+  },
+  "defaultCategory": "Utility",
+  "categoryOrder": [
+    "Core",
+    "Credential Strategies",
+    "Utility Types",
+    "Legacy"
+  ]
+}

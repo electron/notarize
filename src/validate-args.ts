@@ -89,6 +89,9 @@ export function isNotaryToolKeychainCredentials(
   return creds.keychain !== undefined || creds.keychainProfile !== undefined;
 }
 
+/**
+ * @internal
+ */
 export function validateNotaryToolAuthorizationArgs(
   opts: NotaryToolCredentials,
 ): NotaryToolCredentials {
