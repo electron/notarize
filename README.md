@@ -40,10 +40,18 @@ For notarization, you need the following things:
 > If you are using Electron 11 or below, you must add the `com.apple.security.cs.allow-unsigned-executable-memory` entitlement too.
 > When using version 12+, this entitlement should not be applied as it increases your app's attack surface.
 
+### Notarization on older macOS versions
+
+Xcode 13 is available from macOS 11.3, but notarization can be performed on systems down to macOS 10.15
+(see [TN3147](https://developer.apple.com/documentation/technotes/tn3147-migrating-to-the-latest-notarization-tool#Enable-notarization-on-an-older-version-of-macOS) for more information).
+
+To achieve this, you can copy notarytool binary from a newer macOS version and provide its path as `notarytoolPath` option.
+
 ## API
 
 `@electron/notarize` exposes a single `notarize` function that accepts the following parameters:
 * `appPath` — the absolute path to your codesigned and packaged Electron application.
+* `notarytoolPath` - String (optional) - Path of the notarytool binary ([more details](#notarization-on-older-macos-versions)) 
 * additional options required for authenticating your Apple ID (see below)
 
 The method returns a void Promise once app notarization is complete. Please note that notarization may take

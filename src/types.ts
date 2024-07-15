@@ -129,6 +129,7 @@ export interface NotaryToolNotarizeAppOptions {
    * Absolute path to your packaged and codesigned Electron application.
    */
   appPath: string;
+  notarytoolPath?: string;
 }
 
 /**

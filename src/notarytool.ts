@@ -12,6 +12,12 @@ import { NotaryToolCredentials, NotaryToolStartOptions } from './types';
 
 const d = debug('electron-notarize:notarytool');
 
+function runNotaryTool(args: string[], notarytoolPath?: string) {
+  const useXcrun = typeof notarytoolPath === 'undefined';
+  const cmd = useXcrun ? 'xcrun' : notarytoolPath;
+  return spawn(cmd, useXcrun ? ['notarytool', ...args] : args);
+}
+
 function authorizationArgs(rawOpts: NotaryToolCredentials): string[] {
   const opts = validateNotaryToolAuthorizationArgs(rawOpts);
   if (isNotaryToolPasswordCredentials(opts)) {
@@ -41,7 +47,11 @@ function authorizationArgs(rawOpts: NotaryToolCredentials): string[] {
   }
 }
 
-export async function isNotaryToolAvailable() {
+export async function isNotaryToolAvailable(notarytoolPath?: string) {
+  if (typeof notarytoolPath !== 'undefined') {
+    const result = await spawn(notarytoolPath, ['--version']);
+    return result.code === 0;
+  }
   const result = await spawn('xcrun', ['--find', 'notarytool']);
   return result.code === 0;
 }
@@ -73,7 +83,6 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
     }
 
     const notarizeArgs = [
-      'notarytool',
       'submit',
       filePath,
       ...authorizationArgs(opts),
@@ -82,7 +91,7 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
       'json',
     ];
 
-    const result = await spawn('xcrun', notarizeArgs);
+    const result = await runNotaryTool(notarizeArgs, opts.notarytoolPath);
     const rawOut = result.output.trim();
 
     let parsed: any;
@@ -102,12 +111,10 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
     let logOutput: undefined | string;
     if (parsed.id) {
       try {
-        const logResult = await spawn('xcrun', [
-          'notarytool',
-          'log',
-          parsed.id,
-          ...authorizationArgs(opts),
-        ]);
+        const logResult = await runNotaryTool(
+          ['log', parsed.id, ...authorizationArgs(opts)],
+          opts.notarytoolPath,
+        );
         d('notarization log', logResult.output);
         logOutput = logResult.output;
       } catch (e) {
