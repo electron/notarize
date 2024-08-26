@@ -13,7 +13,7 @@ import { NotaryToolCredentials, NotaryToolStartOptions } from './types';
 const d = debug('electron-notarize:notarytool');
 
 function runNotaryTool(args: string[], notarytoolPath?: string) {
-  const useXcrun = typeof notarytoolPath === 'undefined';
+  const useXcrun = notarytoolPath === undefined;
   const cmd = useXcrun ? 'xcrun' : notarytoolPath;
   return spawn(cmd, useXcrun ? ['notarytool', ...args] : args);
 }
@@ -61,7 +61,7 @@ async function getNotarizationLogs(opts: NotaryToolStartOptions, id: string) {
 }
 
 export async function isNotaryToolAvailable(notarytoolPath?: string) {
-  if (typeof notarytoolPath !== 'undefined') {
+  if (notarytoolPath !== undefined) {
     const result = await spawn(notarytoolPath, ['--version']);
     return result.code === 0;
   } else {
