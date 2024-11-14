@@ -1,0 +1,23 @@
+name: Publish documentation
+
+on:
+  push:
+    branches:
+      - build/docs-website-action # TEST ACTION
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+*
+
+permissions: {}
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332  # tag: v4.1.7
+      - name: Fetch all git branches
+        run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b  # tag: v4.0.3
+        with:
+          node-version: lts/*
+      - run: yarn --frozen-lockfile
+      - run: yarn build:docs
