@@ -1,11 +1,11 @@
 import debug from 'debug';
 
 import { spawn } from './spawn';
-import { NotarizeStapleOptions } from './types';
+import { NotaryToolNotarizeAppOptions } from './types';
 
 const d = debug('electron-notarize:staple');
 
-export async function stapleApp(opts: NotarizeStapleOptions): Promise<void> {
+export async function stapleApp(opts: NotaryToolNotarizeAppOptions): Promise<void> {
   d('attempting to staple app:', opts.appPath);
   const result = await spawn('xcrun', ['stapler', 'staple', '-v', opts.appPath]);
 

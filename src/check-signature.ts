@@ -1,21 +1,21 @@
 import * as path from 'path';
 
 import { spawn } from './spawn';
-import { NotarizeStapleOptions } from './types';
+import { NotaryToolNotarizeAppOptions } from './types';
 import debug from 'debug';
 const d = debug('electron-notarize');
 
-const codesignDisplay = async (opts: NotarizeStapleOptions) => {
+const codesignDisplay = async (opts: NotaryToolNotarizeAppOptions) => {
   const result = await spawn('codesign', ['-dv', '-vvvv', '--deep', opts.appPath]);
   return result;
 };
 
-const codesign = async (opts: NotarizeStapleOptions) => {
+const codesign = async (opts: NotaryToolNotarizeAppOptions) => {
   d('attempting to check codesign of app:', opts.appPath);
   const result = await spawn('codesign', ['-vvv', '--deep', '--strict', opts.appPath]);
   return result;
 };
-export async function checkSignatures(opts: NotarizeStapleOptions): Promise<void> {
+export async function checkSignatures(opts: NotaryToolNotarizeAppOptions): Promise<void> {
   const fileExt = path.extname(opts.appPath);
   if (fileExt === '.dmg' || fileExt === '.pkg') {
     d('skipping codesign check for dmg or pkg file');

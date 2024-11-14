@@ -12,6 +12,12 @@ import { NotaryToolCredentials, NotaryToolStartOptions } from './types';
 
 const d = debug('electron-notarize:notarytool');
 
+function runNotaryTool(args: string[], notarytoolPath?: string) {
+  const useXcrun = notarytoolPath === undefined;
+  const cmd = useXcrun ? 'xcrun' : notarytoolPath;
+  return spawn(cmd, useXcrun ? ['notarytool', ...args] : args);
+}
+
 function authorizationArgs(rawOpts: NotaryToolCredentials): string[] {
   const opts = validateNotaryToolAuthorizationArgs(rawOpts);
   if (isNotaryToolPasswordCredentials(opts)) {
@@ -41,9 +47,27 @@ function authorizationArgs(rawOpts: NotaryToolCredentials): string[] {
   }
 }
 
-export async function isNotaryToolAvailable() {
-  const result = await spawn('xcrun', ['--find', 'notarytool']);
-  return result.code === 0;
+async function getNotarizationLogs(opts: NotaryToolStartOptions, id: string) {
+  try {
+    const logResult = await runNotaryTool(
+      ['log', id, ...authorizationArgs(opts)],
+      opts.notarytoolPath,
+    );
+    d('notarization log', logResult.output);
+    return logResult.output;
+  } catch (e) {
+    d('failed to pull notarization logs', e);
+  }
+}
+
+export async function isNotaryToolAvailable(notarytoolPath?: string) {
+  if (notarytoolPath !== undefined) {
+    const result = await spawn(notarytoolPath, ['--version']);
+    return result.code === 0;
+  } else {
+    const result = await spawn('xcrun', ['--find', 'notarytool']);
+    return result.code === 0;
+  }
 }
 
 export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions) {
@@ -70,7 +94,6 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
     }
 
     const notarizeArgs = [
-      'notarytool',
       'submit',
       filePath,
       ...authorizationArgs(opts),
@@ -79,25 +102,32 @@ export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions)
       'json',
     ];
 
-    const result = await spawn('xcrun', notarizeArgs);
-    const parsed = JSON.parse(result.output.trim());
+    const result = await runNotaryTool(notarizeArgs, opts.notarytoolPath);
+    const rawOut = result.output.trim();
 
-    if (result.code !== 0 || !parsed.status || parsed.status !== 'Accepted') {
-      try {
-        if (parsed && parsed.id) {
-          const logResult = await spawn('xcrun', [
-            'notarytool',
-            'log',
-            parsed.id,
-            ...authorizationArgs(opts),
-          ]);
-          d('notarization log', logResult.output);
-        }
-      } catch (e) {
-        d('failed to pull notarization logs', e);
-      }
-      throw new Error(`Failed to notarize via notarytool\n\n${result.output}`);
+    let parsed: any;
+    try {
+      parsed = JSON.parse(rawOut);
+    } catch (err) {
+      throw new Error(
+        `Failed to notarize via notarytool.  Failed with unexpected result: \n\n${rawOut}`,
+      );
     }
-    d('notarization success');
+
+    let logOutput: undefined | string;
+    if (typeof parsed.id === 'string') {
+      logOutput = await getNotarizationLogs(opts, parsed.id);
+    }
+
+    if (result.code === 0 && parsed.status === 'Accepted') {
+      d(`notarization success (id: ${parsed.id})`);
+      return;
+    }
+
+    let message = `Failed to notarize via notarytool\n\n${result.output}`;
+    if (logOutput) {
+      message += `\n\nDiagnostics from notarytool log: ${logOutput}`;
+    }
+    throw new Error(message);
   });
 }

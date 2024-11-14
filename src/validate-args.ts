@@ -8,6 +8,7 @@ import {
   NotaryToolPasswordCredentials,
 } from './types';
 
+/** @deprecated */
 export function isLegacyPasswordCredentials(
   opts: LegacyNotarizeCredentials,
 ): opts is LegacyNotarizePasswordCredentials {
@@ -15,6 +16,7 @@ export function isLegacyPasswordCredentials(
   return creds.appleId !== undefined || creds.appleIdPassword !== undefined;
 }
 
+/** @deprecated */
 export function isLegacyApiKeyCredentials(
   opts: LegacyNotarizeCredentials,
 ): opts is LegacyNotarizeApiKeyCredentials {
@@ -22,6 +24,7 @@ export function isLegacyApiKeyCredentials(
   return creds.appleApiKey !== undefined || creds.appleApiIssuer !== undefined;
 }
 
+/** @deprecated */
 export function validateLegacyAuthorizationArgs(
   opts: LegacyNotarizeCredentials,
 ): LegacyNotarizeCredentials {
@@ -86,6 +89,9 @@ export function isNotaryToolKeychainCredentials(
   return creds.keychain !== undefined || creds.keychainProfile !== undefined;
 }
 
+/**
+ * @internal
+ */
 export function validateNotaryToolAuthorizationArgs(
   opts: NotaryToolCredentials,
 ): NotaryToolCredentials {
