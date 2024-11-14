@@ -16,6 +16,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "build:docs": "npx typedoc",
     "lint": "prettier --check \"src/**/*.ts\"",
     "prepare": "yarn build",
     "test": "jest"
