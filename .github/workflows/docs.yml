@@ -26,4 +26,6 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            az storage -h
+            az storage blob upload-batch --account-name electronecosystemapidocs -d '$web' -s ./docs --overwrite --sas-token "$SAS"
+        env:
+          SAS: ${{ secrets.SAS }}
