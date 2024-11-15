@@ -2,8 +2,6 @@ name: Publish API documentation
 
 on:
   push:
-    branches:
-      - build/docs-website-action # TEST ACTION
     tags:
       - v[0-9]+.[0-9]+.[0-9]+*
 
