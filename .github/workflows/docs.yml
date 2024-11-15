@@ -2,6 +2,8 @@ name: Publish API documentation
 
 on:
   push:
+    branches:
+      - build/docs-website-action # TEST ACTION
     tags:
       - v[0-9]+.[0-9]+.[0-9]+*
 
@@ -24,6 +26,6 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            az storage blob upload-batch --account-name electronecosystemapidocs -d '$web' -s ./docs --overwrite --sas-token "$SAS_TOKEN"
+            az storage blob upload-batch --account-name electronecosystemapidocs -d '$web/notarize/${{ github.ref_name }}' -s ./docs --overwrite --sas-token "$SAS_TOKEN"
         env:
           SAS_TOKEN: ${{ secrets.SAS_TOKEN }}
