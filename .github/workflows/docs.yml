@@ -1,0 +1,32 @@
+name: Publish API documentation
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+*
+
+permissions: {}
+
+jobs:
+  docs:
+    runs-on: ubuntu-24
+    environment: 
+      name: publish-docs
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # tag: v4.2.2
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af  # tag: v4.1.0
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+      - name: Build API documentation
+        run: yarn build:docs
+      - name: Upload to Azure Blob Storage
+        uses: azure/cli@089eac9d8cc39f5d003e94f8b65efc51076c9cbd  # tag: v2.1.0
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az storage blob upload-batch --account-name $ACCOUNT_NAME -d '$web/notarize/${{ github.ref_name }}' -s ./docs --overwrite --sas-token "$SAS_TOKEN"
+        env:
+          SAS_TOKEN: ${{ secrets.SAS_TOKEN }}
+          ACCOUNT_NAME: ${{ secrets.ACCOUNT_NAME }}
