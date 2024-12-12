@@ -72,7 +72,7 @@ export async function isNotaryToolAvailable(notarytoolPath?: string) {
 
 export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions) {
   d('starting notarize process for app:', opts.appPath);
-  return await withTempDir(async dir => {
+  return await withTempDir(async (dir) => {
     const fileExt = path.extname(opts.appPath);
     let filePath;
     if (fileExt === '.dmg' || fileExt === '.pkg') {
