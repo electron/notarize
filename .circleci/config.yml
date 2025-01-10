@@ -11,14 +11,7 @@ workflows:
       - node/test:
           executor: node/macos
           name: test-mac-<< matrix.node-version >>
-          override-ci-command: yarn install --frozen-lockfile --ignore-engines
-          pre-steps:
-            - when:
-                condition:
-                  and:
-                    - equal: [ '14.16', << matrix.node-version >> ]
-                steps:
-                  - node/install-rosetta
+          override-ci-command: yarn install --frozen-lockfile
           test-steps:
             - run: yarn lint
             - run: yarn test
@@ -27,11 +20,7 @@ workflows:
             alias: test-mac
             parameters:
               node-version:
-                - '20.9'
-                - '18.17'
-                - '16.20'
-                # Stay below 14.17.0 or nvm tries to download arm64 artifacts which don't exist
-                - '14.16'
+                - '22.13'
       - cfa/release:
           requires:
             - test-mac
