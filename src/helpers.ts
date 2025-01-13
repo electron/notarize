@@ -14,7 +14,7 @@ export async function withTempDir<T>(fn: (dir: string) => Promise<T>) {
     result = await fn(dir);
   } catch (err) {
     d('work failed');
-    await fs.rm(dir, { recursive: true });
+    await fs.rm(dir, { recursive: true, force: true });
     throw err;
   }
   d('work succeeded');
