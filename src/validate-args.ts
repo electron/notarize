@@ -1,66 +1,9 @@
 import {
-  LegacyNotarizeApiKeyCredentials,
-  LegacyNotarizeCredentials,
-  LegacyNotarizePasswordCredentials,
   NotaryToolApiKeyCredentials,
   NotaryToolCredentials,
   NotaryToolKeychainCredentials,
   NotaryToolPasswordCredentials,
 } from './types';
-
-/** @deprecated */
-export function isLegacyPasswordCredentials(
-  opts: LegacyNotarizeCredentials,
-): opts is LegacyNotarizePasswordCredentials {
-  const creds = opts as LegacyNotarizePasswordCredentials;
-  return creds.appleId !== undefined || creds.appleIdPassword !== undefined;
-}
-
-/** @deprecated */
-export function isLegacyApiKeyCredentials(
-  opts: LegacyNotarizeCredentials,
-): opts is LegacyNotarizeApiKeyCredentials {
-  const creds = opts as LegacyNotarizeApiKeyCredentials;
-  return creds.appleApiKey !== undefined || creds.appleApiIssuer !== undefined;
-}
-
-/** @deprecated */
-export function validateLegacyAuthorizationArgs(
-  opts: LegacyNotarizeCredentials,
-): LegacyNotarizeCredentials {
-  const isPassword = isLegacyPasswordCredentials(opts);
-  const isApiKey = isLegacyApiKeyCredentials(opts);
-  if (isPassword && isApiKey) {
-    throw new Error('Cannot use both password credentials and API key credentials at once');
-  }
-  if (isPassword) {
-    const passwordCreds = opts as LegacyNotarizePasswordCredentials;
-    if (!passwordCreds.appleId) {
-      throw new Error(
-        'The appleId property is required when using notarization with appleIdPassword',
-      );
-    } else if (!passwordCreds.appleIdPassword) {
-      throw new Error(
-        'The appleIdPassword property is required when using notarization with appleId',
-      );
-    }
-    return passwordCreds;
-  }
-  if (isApiKey) {
-    const apiKeyCreds = opts as LegacyNotarizeApiKeyCredentials;
-    if (!apiKeyCreds.appleApiKey) {
-      throw new Error(
-        'The appleApiKey property is required when using notarization with appleApiIssuer',
-      );
-    } else if (!apiKeyCreds.appleApiIssuer) {
-      throw new Error(
-        'The appleApiIssuer property is required when using notarization with appleApiKey',
-      );
-    }
-    return apiKeyCreds;
-  }
-  throw new Error('No authentication properties provided (e.g. appleId, appleApiKey)');
-}
 
 export function isNotaryToolPasswordCredentials(
   opts: NotaryToolCredentials,

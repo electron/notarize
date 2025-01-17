@@ -4,12 +4,7 @@ import retry from 'promise-retry';
 import { checkSignatures } from './check-signature';
 import { isNotaryToolAvailable, notarizeAndWaitForNotaryTool } from './notarytool';
 import { stapleApp } from './staple';
-import {
-  NotarizeOptions,
-  NotaryToolStartOptions,
-  NotarizeOptionsLegacy,
-  NotarizeOptionsNotaryTool,
-} from './types';
+import { NotarizeOptions } from './types';
 
 const d = debug('electron-notarize');
 
@@ -28,19 +23,9 @@ export { validateNotaryToolAuthorizationArgs as validateAuthorizationArgs } from
  * @param args Options for notarization
  * @returns The Promise resolves once notarization is complete. Note that this may take a few minutes.
  */
-async function notarize(args: NotarizeOptionsNotaryTool): Promise<void>;
-/**
- * @deprecated
- */
-async function notarize(args: NotarizeOptionsLegacy): Promise<void>;
+async function notarize(args: NotarizeOptions): Promise<void>;
 
 async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
-  if (otherOptions.tool === 'legacy') {
-    throw new Error(
-      'Notarization with the legacy altool system was decommisioned as of November 2023',
-    );
-  }
-
   await checkSignatures({ appPath });
 
   d('notarizing using notarytool');
@@ -53,7 +38,7 @@ async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
   await notarizeAndWaitForNotaryTool({
     appPath,
     ...otherOptions,
-  } as NotaryToolStartOptions);
+  } as NotarizeOptions);
 
   await retry(() => stapleApp({ appPath }), {
     retries: 3,

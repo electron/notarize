@@ -1,13 +1,4 @@
 /**
- * @deprecated This interface was used for Apple's `altool`, which was sunset in 2023 and no longer works.
- * @category Legacy
- */
-export interface LegacyNotarizePasswordCredentials {
-  appleId: string;
-  appleIdPassword: string;
-}
-
-/**
  * You can generate an [app-specific password](https://support.apple.com/en-us/102654) for your Apple ID
  * to notarize your Electron applications.
  *
@@ -34,15 +25,6 @@ export interface NotaryToolPasswordCredentials {
    * teams.
    */
   teamId: string;
-}
-
-/**
- * @deprecated This interface was used for Apple's `altool`, which was sunset in 2023 and no longer works.
- * @category Legacy
- */
-export interface LegacyNotarizeApiKeyCredentials {
-  appleApiKey: string;
-  appleApiIssuer: string;
 }
 
 /**
@@ -91,14 +73,6 @@ export interface NotaryToolKeychainCredentials {
 }
 
 /**
- * @deprecated This interface was used for Apple's `altool`, which was sunset in 2023 and no longer works.
- * @category Legacy
- */
-export type LegacyNotarizeCredentials =
-  | LegacyNotarizePasswordCredentials
-  | LegacyNotarizeApiKeyCredentials;
-
-/**
  * Credential options for authenticating `notarytool`. There are three valid stategies available:
  *
  * - {@link NotaryToolPasswordCredentials} — Using an Apple ID and app-specific password
@@ -110,15 +84,6 @@ export type NotaryToolCredentials =
   | NotaryToolPasswordCredentials
   | NotaryToolApiKeyCredentials
   | NotaryToolKeychainCredentials;
-
-/**
- * @deprecated This interface was used for Apple's `altool`, which was sunset in 2023 and no longer works.
- * @category Legacy
- */
-export interface LegacyNotarizeAppOptions {
-  appPath: string;
-  appBundleId: string;
-}
 
 /**
  * Non-credential options for notarizing your application with `notarytool`.
@@ -133,55 +98,7 @@ export interface NotaryToolNotarizeAppOptions {
 }
 
 /**
- * @deprecated This interface was used for Apple's `altool`, which was sunset in 2023 and no longer works.
- * @category Legacy
- */
-interface TransporterOptions {
-  ascProvider?: string;
-}
-
-/**
- * @deprecated This interface was used for Apple's `altool`, which was sunset in 2023 and no longer works.
- * @category Legacy
- */
-interface NotarizeResult {
-  uuid: string;
-}
-
-/**
- * @deprecated This type was used for Apple's `altool`, which was sunset in 2023 and no longer works.
- * @category Legacy
- */
-export type LegacyNotarizeStartOptions = LegacyNotarizeAppOptions &
-  LegacyNotarizeCredentials &
-  TransporterOptions;
-
-/**
- * @deprecated This type was used for Apple's `altool`, which was sunset in 2023 and no longer works.
- * @category Legacy
- */
-export type LegacyNotarizeWaitOptions = NotarizeResult & LegacyNotarizeCredentials;
-
-/**
- * @deprecated This type was used for Apple's `altool`, which was sunset in 2023 and no longer works.
- * @category Legacy
- */
-export type NotarizeOptionsLegacy = { tool: 'legacy' } & LegacyNotarizeStartOptions;
-
-/**
  * Options for notarizing your Electron app with `notarytool`.
  * @category Core
  */
-export type NotaryToolStartOptions = NotaryToolNotarizeAppOptions & NotaryToolCredentials;
-
-/**
- * Helper type that specifies that `@electron/notarize` is using the `notarytool` strategy.
- * @category Utility Types
- */
-export type NotarizeOptionsNotaryTool = { tool?: 'notarytool' } & NotaryToolStartOptions;
-
-/**
- * Options accepted by the `notarize` method.
- * @internal
- */
-export type NotarizeOptions = NotarizeOptionsLegacy | NotarizeOptionsNotaryTool;
+export type NotarizeOptions = NotaryToolNotarizeAppOptions & NotaryToolCredentials;
