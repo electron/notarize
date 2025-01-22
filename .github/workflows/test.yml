@@ -17,8 +17,7 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - '22.0.x'
-          - '22.x'
+          - '22.12.x'
     runs-on: macos-latest
     steps:
       - name: Checkout
