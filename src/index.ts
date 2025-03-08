@@ -1,16 +1,16 @@
 import debug from 'debug';
 import retry from 'promise-retry';
 
-import { checkSignatures } from './check-signature';
-import { isNotaryToolAvailable, notarizeAndWaitForNotaryTool } from './notarytool';
-import { stapleApp } from './staple';
-import { NotarizeOptions } from './types';
+import { checkSignatures } from './check-signature.js';
+import { isNotaryToolAvailable, notarizeAndWaitForNotaryTool } from './notarytool.js';
+import { stapleApp } from './staple.js';
+import { NotarizeOptions } from './types.js';
 
 const d = debug('electron-notarize');
 
 export { NotarizeOptions };
 
-export { validateNotaryToolAuthorizationArgs as validateAuthorizationArgs } from './validate-args';
+export { validateNotaryToolAuthorizationArgs as validateAuthorizationArgs } from './validate-args.js';
 
 /**
  * Sends your app to Apple for notarization with `notarytool` and staples a successful

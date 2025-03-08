@@ -3,7 +3,7 @@ import {
   NotaryToolCredentials,
   NotaryToolKeychainCredentials,
   NotaryToolPasswordCredentials,
-} from './types';
+} from './types.js';
 
 export function isNotaryToolPasswordCredentials(
   opts: NotaryToolCredentials,

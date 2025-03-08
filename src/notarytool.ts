@@ -1,14 +1,14 @@
 import debug from 'debug';
-import * as path from 'path';
+import path from 'node:path';
 
-import { spawn } from './spawn';
-import { makeSecret, withTempDir } from './helpers';
+import { spawn } from './spawn.js';
+import { makeSecret, withTempDir } from './helpers.js';
 import {
   validateNotaryToolAuthorizationArgs,
   isNotaryToolPasswordCredentials,
   isNotaryToolApiKeyCredentials,
-} from './validate-args';
-import { NotarizeOptions, NotaryToolCredentials } from './types';
+} from './validate-args.js';
+import { NotarizeOptions, NotaryToolCredentials } from './types.js';
 
 const d = debug('electron-notarize:notarytool');
 
