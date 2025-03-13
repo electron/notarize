@@ -21,7 +21,7 @@
     "lint": "prettier --check \"src/**/*.ts\"",
     "prettier:write": "prettier --write \"src/**/*.ts\"",
     "prepare": "yarn build",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "files": [
     "lib"
