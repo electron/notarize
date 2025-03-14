@@ -1,6 +1,8 @@
-import { spawn as cpSpawn, SpawnOptions } from 'child_process';
+import { spawn as cpSpawn, SpawnOptions } from 'node:child_process';
+
 import debug from 'debug';
-import { isSecret } from './helpers';
+
+import { isSecret } from './helpers.js';
 
 const d = debug('electron-notarize:spawn');
 

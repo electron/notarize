@@ -1,21 +1,10 @@
 {
-	"compilerOptions": {
-		"module": "commonjs",
-		"target": "es2015",
-		"outDir": "lib",
-		"sourceMap": true,
-		"rootDir": "src",
-		"experimentalDecorators": true,
-		"strictNullChecks": true,
-		"noUnusedLocals": true,
-		"noImplicitThis": true,
-		"noImplicitAny": true,
-		"declaration": true,
-		"skipDefaultLibCheck": true,
-    "skipLibCheck": true,
-		"esModuleInterop": true
-	},
-	"include": [
-		"src/**/*"
-	],
+  "extends": "@tsconfig/node22/tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": true,
+    "outDir": "lib",
+    "types": ["node"],
+    "declaration": true
+  },
+  "include": ["src"]
 }
