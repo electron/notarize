@@ -1,5 +1,5 @@
 import debug from 'debug';
-import * as path from 'path';
+import path from 'node:path';
 
 import { spawn } from './spawn.js';
 import { NotaryToolNotarizeAppOptions } from './types.js';
