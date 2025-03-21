@@ -7,7 +7,7 @@ import { parseNotarizationInfo, withTempDir } from '../src/helpers';
 
 describe('helpers', () => {
   describe('parseNotarizationInfo', () => {
-    it('build a NotarizationInfo object', () => {
+    it('builds a NotarizationInfo object', () => {
       const output = `
 RequestUUID: 123
 Date: 2020-01-01
