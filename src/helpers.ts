@@ -1,25 +1,24 @@
 import debug from 'debug';
-import * as fs from 'graceful-fs';
+import fs from 'fs-extra';
 
 import * as os from 'node:os';
 import * as path from 'node:path';
-import * as util from 'node:util';
 
 const d = debug('electron-notarize:helpers');
 
 export async function withTempDir<T>(fn: (dir: string) => Promise<T>) {
-  const dir = await util.promisify(fs.mkdtemp)(path.resolve(os.tmpdir(), 'electron-notarize-'));
+  const dir = await fs.mkdtemp(path.resolve(os.tmpdir(), 'electron-notarize-'));
   d('doing work inside temp dir:', dir);
   let result: T;
   try {
     result = await fn(dir);
   } catch (err) {
     d('work failed');
-    await util.promisify(fs.rm)(dir, { recursive: true, force: true });
+    await fs.rm(dir, { recursive: true, force: true });
     throw err;
   }
   d('work succeeded');
-  await util.promisify(fs.rm)(dir, { recursive: true, force: true });
+  await fs.rm(dir, { recursive: true, force: true });
   return result;
 }
 
