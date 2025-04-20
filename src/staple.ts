@@ -1,7 +1,6 @@
 import debug from 'debug';
-
-import { spawn } from './spawn';
-import { NotaryToolNotarizeAppOptions } from './types';
+import { spawn } from './spawn.js';
+import { NotaryToolNotarizeAppOptions } from './types.js';
 
 const d = debug('electron-notarize:staple');
 

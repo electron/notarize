@@ -1,14 +1,14 @@
 import debug from 'debug';
-import * as path from 'path';
+import path from 'node:path';
 
-import { spawn } from './spawn';
-import { makeSecret, withTempDir } from './helpers';
+import { spawn } from './spawn.js';
+import { makeSecret, withTempDir } from './helpers.js';
 import {
   validateNotaryToolAuthorizationArgs,
   isNotaryToolPasswordCredentials,
   isNotaryToolApiKeyCredentials,
-} from './validate-args';
-import { NotaryToolCredentials, NotaryToolStartOptions } from './types';
+} from './validate-args.js';
+import { NotarizeOptions, NotaryToolCredentials } from './types.js';
 
 const d = debug('electron-notarize:notarytool');
 
@@ -47,7 +47,7 @@ function authorizationArgs(rawOpts: NotaryToolCredentials): string[] {
   }
 }
 
-async function getNotarizationLogs(opts: NotaryToolStartOptions, id: string) {
+async function getNotarizationLogs(opts: NotarizeOptions, id: string) {
   try {
     const logResult = await runNotaryTool(
       ['log', id, ...authorizationArgs(opts)],
@@ -70,9 +70,9 @@ export async function isNotaryToolAvailable(notarytoolPath?: string) {
   }
 }
 
-export async function notarizeAndWaitForNotaryTool(opts: NotaryToolStartOptions) {
+export async function notarizeAndWaitForNotaryTool(opts: NotarizeOptions) {
   d('starting notarize process for app:', opts.appPath);
-  return await withTempDir(async dir => {
+  return await withTempDir(async (dir) => {
     const fileExt = path.extname(opts.appPath);
     let filePath;
     if (fileExt === '.dmg' || fileExt === '.pkg') {

@@ -1,7 +1,7 @@
-import * as path from 'path';
+import path from 'node:path';
 
-import { spawn } from './spawn';
-import { NotaryToolNotarizeAppOptions } from './types';
+import { spawn } from './spawn.js';
+import { NotaryToolNotarizeAppOptions } from './types.js';
 import debug from 'debug';
 const d = debug('electron-notarize');
 

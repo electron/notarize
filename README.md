@@ -3,7 +3,7 @@ Electron Notarize
 
 > Notarize your Electron apps seamlessly for macOS
 
-[![CircleCI status](https://circleci.com/gh/electron/notarize.svg?style=shield)](https://circleci.com/gh/electron/notarize)
+[![Test](https://github.com/electron/notarize/actions/workflows/test.yml/badge.svg)](https://github.com/electron/notarize/actions/workflows/test.yml)
 [![NPM package](https://img.shields.io/npm/v/@electron/notarize)](https://npm.im/@electron/notarize)
 
 ## Installation
@@ -51,7 +51,7 @@ For notarization, you need the following things:
 The method returns a void Promise once app notarization is complete. Please note that notarization may take
 many minutes.
 
-If the notarization process is unusually log for your application, see Apple Developer's docs to
+If the notarization process is unusually long for your application, see Apple Developer's docs to
 [Avoid long notarization response times and size limits](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/customizing_the_notarization_workflow#3561440).
 
 ### Usage with app-specific password
