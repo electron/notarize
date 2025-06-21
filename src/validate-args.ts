@@ -69,10 +69,6 @@ export function validateNotaryToolAuthorizationArgs(
       throw new Error(
         'The appleApiKey property is required when using notarization with ASC credentials',
       );
-    } else if (!apiKeyCreds.appleApiIssuer) {
-      throw new Error(
-        'The appleApiIssuer property is required when using notarization with ASC credentials',
-      );
     } else if (!apiKeyCreds.appleApiKeyId) {
       throw new Error(
         'The appleApiKeyId property is required when using notarization with ASC credentials',
