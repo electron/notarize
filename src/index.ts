@@ -8,7 +8,7 @@ import { NotarizeOptions } from './types.js';
 
 const d = debug('electron-notarize');
 
-export { NotarizeOptions };
+export * from './types.js';
 
 export { validateNotaryToolAuthorizationArgs as validateAuthorizationArgs } from './validate-args.js';
 
