@@ -82,7 +82,7 @@ await notarize({
 Alternatively, you can also authenticate via JSON Web Token (JWT) with App Store Connect.
 
 You can obtain an API key from [App Store Connect](https://appstoreconnect.apple.com/access/integrations/api).
-Create a **Team Key** (not an _Individual Key_) with **App Manager** access.
+Create a **Team Key** with **App Manager** access.
 
 Note down the Issuer ID (UUID format) and Key ID (10-character alphanumeric string),
 and download the `.p8` API key file (`AuthKey_<appleApiKeyId>.p8`).
@@ -99,6 +99,8 @@ await notarize({
   appleApiIssuer, // Issuer ID (e.g. `d5631714-a680-4b4b-8156-b4ed624c0845`)
 });
 ```
+
+You can alternatively use an [individual API key](https://developer.apple.com/documentation/appstoreconnectapi/creating-api-keys-for-app-store-connect-api#Generate-an-Individual-Key) if (and only if) you are using Xcode 26+. When using an individual API key, it is imperative that you omit `appleApiIssuer` (issuer ID); otherwise you will receive a "401 Unauthorized" response from the server.
 
 ### Usage with Keychain credentials
 

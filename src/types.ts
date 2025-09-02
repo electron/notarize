@@ -44,9 +44,13 @@ export interface NotaryToolApiKeyCredentials {
   appleApiKeyId: string;
   /**
    * App Store Connect API Issuer ID. The issuer ID is a UUID format string
-   * (e.g. `c055ca8c-e5a8-4836-b61d-aa5794eeb3f4`).
+   * (e.g. `c055ca8c-e5a8-4836-b61d-aa5794eeb3f4`). Required for Team keys.
+   * Do not provide for Individual keys, this will result in a "401 Unauthorized"
+   * response from the server.
+   *
+   * Individual keys can only be used with Xcode 26+.
    */
-  appleApiIssuer: string;
+  appleApiIssuer?: string;
 }
 
 /**

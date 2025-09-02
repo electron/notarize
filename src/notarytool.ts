@@ -30,14 +30,18 @@ function authorizationArgs(rawOpts: NotaryToolCredentials): string[] {
       makeSecret(opts.teamId),
     ];
   } else if (isNotaryToolApiKeyCredentials(opts)) {
-    return [
-      '--key',
-      makeSecret(opts.appleApiKey),
-      '--key-id',
-      makeSecret(opts.appleApiKeyId),
-      '--issuer',
-      makeSecret(opts.appleApiIssuer),
-    ];
+    // --issuer is an optional argument as it must not be provided if using an Individual key; Individual keys can only be used with Xcode 26+
+    if (opts.appleApiIssuer) {
+      return [
+        '--key',
+        makeSecret(opts.appleApiKey),
+        '--key-id',
+        makeSecret(opts.appleApiKeyId),
+        '--issuer',
+        makeSecret(opts.appleApiIssuer),
+      ];
+    }
+    return ['--key', makeSecret(opts.appleApiKey), '--key-id', makeSecret(opts.appleApiKeyId)];
   } else {
     // --keychain is optional -- when not specified, the iCloud keychain is used by notarytool
     if (opts.keychain) {
