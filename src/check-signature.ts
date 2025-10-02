@@ -6,9 +6,13 @@ import debug from 'debug';
 const d = debug('electron-notarize');
 
 const codesignDisplay = async (opts: NotaryToolNotarizeAppOptions) => {
-  const result = await spawn('codesign', ['-dv', '-vvvv', '--deep', path.basename(opts.appPath)], {
-    cwd: path.dirname(opts.appPath),
-  });
+  const result = await spawn(
+    'codesign',
+    ['-dv', '-vvvv', '--deep', `./${path.basename(opts.appPath)}`],
+    {
+      cwd: path.dirname(opts.appPath),
+    },
+  );
   return result;
 };
 
@@ -16,7 +20,7 @@ const codesign = async (opts: NotaryToolNotarizeAppOptions) => {
   d('attempting to check codesign of app:', opts.appPath);
   const result = await spawn(
     'codesign',
-    ['-vvv', '--deep', '--strict', path.basename(opts.appPath)],
+    ['-vvv', '--deep', '--strict', `./${path.basename(opts.appPath)}`],
     {
       cwd: path.dirname(opts.appPath),
     },
