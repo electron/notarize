@@ -85,13 +85,14 @@ export async function notarizeAndWaitForNotaryTool(opts: NotarizeOptions) {
     } else {
       filePath = path.resolve(dir, `${path.parse(opts.appPath).name}.zip`);
       d('zipping application to:', filePath);
-      const zipResult = await spawn(
-        'ditto',
-        ['-c', '-k', '--sequesterRsrc', '--keepParent', path.basename(opts.appPath), filePath],
-        {
-          cwd: path.dirname(opts.appPath),
-        },
-      );
+      const zipResult = await spawn('ditto', [
+        '-c',
+        '-k',
+        '--sequesterRsrc',
+        '--keepParent',
+        opts.appPath,
+        filePath,
+      ]);
       if (zipResult.code !== 0) {
         throw new Error(
           `Failed to zip application, exited with code: ${zipResult.code}\n\n${zipResult.output}`,
