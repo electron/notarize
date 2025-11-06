@@ -67,14 +67,17 @@ async function getNotarizationLogs(opts: NotarizeOptions, id: string) {
 function parseNotarytoolOutput(output: string): any {
   const rawOut = output.trim();
 
-  // Be lenient in parsing the output, as notarytool may output warnings
-  const jsonOut = rawOut.substring(rawOut.indexOf('{'), rawOut.lastIndexOf('}') + 1);
-  const nonJsonLines = rawOut
-    .split('\n')
-    .filter((line) => !line.trim().startsWith('{') && !line.trim().endsWith('}'));
-  if (nonJsonLines.length > 0) {
-    d('notarytool produced some non-JSON output:\n', nonJsonLines.join('\n'));
+  let jsonOut: string = '';
+
+  for (const line of rawOut.split('\n')) {
+    const trimmedLine = line.trim();
+    if (trimmedLine.startsWith('{') && trimmedLine.endsWith('}')) {
+      jsonOut = line;
+      break;
+    }
   }
+
+  d('notarytool produced output:\n', output);
 
   let parsed: any;
   try {
