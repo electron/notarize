@@ -1,10 +1,10 @@
-Electron Notarize
------------
+# @electron/notarize
 
 > Notarize your Electron apps seamlessly for macOS
 
 [![Test](https://github.com/electron/notarize/actions/workflows/test.yml/badge.svg)](https://github.com/electron/notarize/actions/workflows/test.yml)
-[![NPM package](https://img.shields.io/npm/v/@electron/notarize)](https://npm.im/@electron/notarize)
+[![npm package](https://img.shields.io/npm/v/@electron/notarize)](https://npm.im/@electron/notarize)
+[![API docs](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fregistry.npmjs.org%2F%40electron%2Fnotarize%2Flatest&query=%24.version&logo=typescript&logoColor=white&label=API%20Docs)](https://packages.electronjs.org/notarize)
 
 ## Installation
 
@@ -19,7 +19,7 @@ From Apple's docs in XCode:
 > A notarized app is a macOS app that was uploaded to Apple for processing before it was distributed.
 > When you export a notarized app from Xcode, it code signs the app with a Developer ID certificate
 > and staples a ticket from Apple to the app. The ticket confirms that you previously uploaded the app to Apple.
-
+>
 > On macOS 10.14 and later, the user can launch notarized apps when Gatekeeper is enabled.
 > When the user first launches a notarized app, Gatekeeper looks for the app’s ticket online.
 > If the user is offline, Gatekeeper looks for the ticket that was stapled to the app.
@@ -40,12 +40,12 @@ For notarization, you need the following things:
 > If you are using Electron 11 or below, you must add the `com.apple.security.cs.allow-unsigned-executable-memory` entitlement too.
 > When using version 12+, this entitlement should not be applied as it increases your app's attack surface.
 
-
 ## API
 
 `@electron/notarize` exposes a single `notarize` function that accepts the following parameters:
+
 * `appPath` — the absolute path to your codesigned and packaged Electron application.
-* `notarytoolPath` - String (optional) - Path to a custom notarytool binary ([more details](#custom-notarytool)) 
+* `notarytoolPath` - String (optional) - Path to a custom notarytool binary ([more details](#custom-notarytool))
 * additional options required for authenticating your Apple ID (see below)
 
 The method returns a void Promise once app notarization is complete. Please note that notarization may take
@@ -53,6 +53,8 @@ many minutes.
 
 If the notarization process is unusually long for your application, see Apple Developer's docs to
 [Avoid long notarization response times and size limits](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/customizing_the_notarization_workflow#3561440).
+
+For full API usage, see the [API documentation](https://packages.electronjs.org/notarize).
 
 ### Usage with app-specific password
 
@@ -131,7 +133,7 @@ xcrun notarytool store-credentials "my-api-key-profile"
 
 Successful storage of your credentials will look like this:
 
-```
+```text
 This process stores your credentials securely in the Keychain. You reference these credentials later using a profile name.
 
 Validating your credentials...
@@ -154,7 +156,7 @@ await notarize({
 
 ### Custom notarytool
 
-You can provide a path to a custom `notarytool`. This module allows this option to enable unique edge cases - but this use case is _explicitly unsupported_. 
+You can provide a path to a custom `notarytool`. This module allows this option to enable unique edge cases - but this use case is _explicitly unsupported_.
 
 ## Troubleshooting
 
@@ -169,7 +171,7 @@ debug information from this module.
 When notarizing your application, you may run into issues with validating your notarization
 credentials.
 
-```
+```text
 Error: HTTP status code: 401. Invalid credentials. Username or password is incorrect.
 Use the app-specific password generated at appleid.apple.com. Ensure that all authentication arguments are correct.
 ```
