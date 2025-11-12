@@ -64,7 +64,7 @@ async function getNotarizationLogs(opts: NotarizeOptions, id: string) {
   }
 }
 
-function parseNotarytoolOutput(output: string): any {
+export function parseNotarytoolOutput(output: string): any {
   const rawOut = output.trim();
 
   let jsonOut: string = '';

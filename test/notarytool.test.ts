@@ -1,27 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { parseNotarytoolOutput } from '../src/notarytool.js';
 
 describe('parseNotarytoolOutput', () => {
-  const parseNotarytoolOutput = (output: string): any => {
-    const rawOut = output.trim();
-
-    const jsonOut = rawOut.substring(rawOut.indexOf('{'), rawOut.lastIndexOf('}') + 1);
-    const nonJsonLines = rawOut
-      .split('\n')
-      .filter((line) => !line.trim().startsWith('{') && !line.trim().endsWith('}'));
-    if (nonJsonLines.length > 0) {
-      console.debug('notarytool produced some non-JSON output:\n', nonJsonLines.join('\n'));
-    }
-
-    let parsed: any;
-    try {
-      parsed = JSON.parse(jsonOut);
-    } catch (err) {
-      throw new Error(`Could not parse notarytool output: \n\n${rawOut}`);
-    }
-
-    return parsed;
-  };
-
   it('parses valid JSON output', () => {
     const output = '{"status": "Accepted", "id": "123"}';
     expect(parseNotarytoolOutput(output)).toEqual({
