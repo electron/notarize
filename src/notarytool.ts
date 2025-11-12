@@ -83,9 +83,7 @@ function parseNotarytoolOutput(output: string): any {
   try {
     parsed = JSON.parse(jsonOut);
   } catch (err) {
-    throw new Error(
-      `Could not parse notarytool output: \n\n${rawOut}`,
-    );
+    throw new Error(`Could not parse notarytool output: \n\n${rawOut}`);
   }
 
   return parsed;
