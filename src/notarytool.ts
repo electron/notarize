@@ -64,6 +64,31 @@ async function getNotarizationLogs(opts: NotarizeOptions, id: string) {
   }
 }
 
+export function parseNotarytoolOutput(output: string): any {
+  const rawOut = output.trim();
+
+  let jsonOut: string = '';
+
+  for (const line of rawOut.split('\n')) {
+    const trimmedLine = line.trim();
+    if (trimmedLine.startsWith('{') && trimmedLine.endsWith('}')) {
+      jsonOut = line;
+      break;
+    }
+  }
+
+  d('notarytool produced output:\n', output);
+
+  let parsed: any;
+  try {
+    parsed = JSON.parse(jsonOut);
+  } catch (err) {
+    throw new Error(`Could not parse notarytool output: \n\n${rawOut}`);
+  }
+
+  return parsed;
+}
+
 export async function isNotaryToolAvailable(notarytoolPath?: string) {
   if (notarytoolPath !== undefined) {
     const result = await spawn(notarytoolPath, ['--version']);
@@ -110,16 +135,8 @@ export async function notarizeAndWaitForNotaryTool(opts: NotarizeOptions) {
     ];
 
     const result = await runNotaryTool(notarizeArgs, opts.notarytoolPath);
-    const rawOut = result.output.trim();
 
-    let parsed: any;
-    try {
-      parsed = JSON.parse(rawOut);
-    } catch (err) {
-      throw new Error(
-        `Failed to notarize via notarytool.  Failed with unexpected result: \n\n${rawOut}`,
-      );
-    }
+    const parsed = parseNotarytoolOutput(result.output);
 
     let logOutput: undefined | string;
     if (typeof parsed.id === 'string') {
