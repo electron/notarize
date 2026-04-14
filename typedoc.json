@@ -8,9 +8,5 @@
     "includeCategories": true
   },
   "defaultCategory": "Utility",
-  "categoryOrder": [
-    "Core",
-    "Credential Strategies",
-    "Utility Types",
-  ]
+  "categoryOrder": ["Core", "Credential Strategies", "Utility Types"]
 }
