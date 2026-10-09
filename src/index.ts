@@ -40,7 +40,7 @@ async function notarize({ appPath, ...otherOptions }: NotarizeOptions) {
     ...otherOptions,
   } as NotarizeOptions);
 
-  await retry(() => stapleApp({ appPath }), {
+  await retry((retry) => stapleApp({ appPath }).catch(retry), {
     retries: 3,
   });
 }
